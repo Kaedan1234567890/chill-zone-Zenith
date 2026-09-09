@@ -1,0 +1,30 @@
+CHILL ZONE ZENITH - GITHUB READY
+
+YOU DO NOT NEED TO CREATE ANY FILES YOURSELF.
+
+1. Extract this ZIP.
+2. Open the extracted "chill-zone-Zenith-GitHub-Ready" folder.
+3. Go to your GitHub repository in your web browser.
+4. Click: Add file -> Upload files.
+5. Drag EVERYTHING INSIDE this folder into GitHub.
+   This includes the .github folder.
+6. Click "Commit changes".
+7. Click the "Actions" tab.
+8. Open "Build Chill Zone Zenith".
+9. Wait for the build:
+      Green check = success.
+      Red X = send ChatGPT a screenshot of the error.
+10. If it is green, open the finished run and scroll to "Artifacts".
+11. Download "chill-zone-zenith-mod".
+12. Extract that downloaded artifact.
+13. Put the .jar inside your Minecraft server's mods folder.
+14. Restart the server.
+15. In Minecraft test:
+      /zenith status
+      /zenith activate ender
+      /zenith deactivate ender
+
+IMPORTANT:
+- Upload the extracted FILES/FOLDERS, not this ZIP itself.
+- The .github/workflows/build.yml file is already included.
+- GitHub will install Java 25 and Gradle 9.5.1 automatically.

@@ -73,3 +73,8 @@ so it survives server restarts.
 4. Add branch-gated custom drops.
 5. Add sword abilities/cooldowns.
 6. Add LuckPerms permission node and polished messages.
+
+
+## GitHub build
+
+This package includes `.github/workflows/build.yml`. After uploading the extracted contents to GitHub and committing them, the **Build Chill Zone Zenith** Action starts automatically. The compiled server mod is uploaded as the `chill-zone-zenith-mod` artifact.
