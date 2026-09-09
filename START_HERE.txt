@@ -1,30 +1,28 @@
-CHILL ZONE ZENITH - GITHUB READY
+CHILL ZONE ZENITH - FIX 2
 
-YOU DO NOT NEED TO CREATE ANY FILES YOURSELF.
+THIS VERSION FIXES THE "FAILED TO FIND OFFICIAL MOJANG MAPPINGS" ERROR.
 
-1. Extract this ZIP.
-2. Open the extracted "chill-zone-Zenith-GitHub-Ready" folder.
-3. Go to your GitHub repository in your web browser.
-4. Click: Add file -> Upload files.
-5. Drag EVERYTHING INSIDE this folder into GitHub.
-   This includes the .github folder.
-6. Click "Commit changes".
-7. Click the "Actions" tab.
-8. Open "Build Chill Zone Zenith".
-9. Wait for the build:
-      Green check = success.
-      Red X = send ChatGPT a screenshot of the error.
-10. If it is green, open the finished run and scroll to "Artifacts".
-11. Download "chill-zone-zenith-mod".
-12. Extract that downloaded artifact.
-13. Put the .jar inside your Minecraft server's mods folder.
-14. Restart the server.
-15. In Minecraft test:
-      /zenith status
-      /zenith activate ender
-      /zenith deactivate ender
+WHAT TO DO:
 
-IMPORTANT:
-- Upload the extracted FILES/FOLDERS, not this ZIP itself.
-- The .github/workflows/build.yml file is already included.
-- GitHub will install Java 25 and Gradle 9.5.1 automatically.
+1. Download this ZIP.
+2. Right-click it -> Extract All.
+3. Open the extracted folder.
+4. Open your GitHub repository.
+5. Delete the OLD project files from the GitHub repository, or replace them when uploading.
+6. Click Add file -> Upload files.
+7. Drag EVERYTHING FROM INSIDE this new extracted folder into GitHub.
+8. Click Commit changes.
+9. Click Actions.
+10. Open the newest "Build Chill Zone Zenith" run.
+
+GREEN CHECK:
+The build worked. Download the artifact at the bottom.
+
+RED X:
+Send ChatGPT a screenshot of the FIRST red error section again.
+Do not try to repair the code yourself.
+
+WHY FIX 2 EXISTS:
+Minecraft 26.2 is no longer obfuscated. The old build.gradle incorrectly asked Loom
+to download official Mojang mapping files that do not exist for this version.
+This build uses Fabric's current Loom plugin and lets 26.2 use its native names directly.
