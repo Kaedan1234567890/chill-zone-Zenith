@@ -4,8 +4,10 @@ import com.chillzone.zenith.progression.ZenithCategory;
 import com.chillzone.zenith.progression.ZenithProgressionState;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
+import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.permissions.Permissions;
 
 public final class ZenithCommands {
     private ZenithCommands() {}
@@ -14,7 +16,9 @@ public final class ZenithCommands {
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
             dispatcher.register(
                 Commands.literal("zenith")
-                    .requires(source -> source.hasPermission(2))
+                    .requires(source ->
+                        source.permissions().hasPermission(Permissions.COMMANDS_GAMEMASTER)
+                    )
 
                     .then(Commands.literal("status")
                         .executes(ctx -> showStatus(ctx.getSource())))
@@ -57,7 +61,7 @@ public final class ZenithCommands {
     }
 
     private static int setCategory(
-            net.minecraft.commands.CommandSourceStack source,
+            CommandSourceStack source,
             String rawCategory,
             boolean enabled
     ) {
@@ -87,7 +91,7 @@ public final class ZenithCommands {
     }
 
     private static int setAll(
-            net.minecraft.commands.CommandSourceStack source,
+            CommandSourceStack source,
             boolean enabled
     ) {
         ZenithProgressionState.get(source.getServer()).setAll(enabled);
@@ -101,9 +105,7 @@ public final class ZenithCommands {
         return 1;
     }
 
-    private static int showStatus(
-            net.minecraft.commands.CommandSourceStack source
-    ) {
+    private static int showStatus(CommandSourceStack source) {
         ZenithProgressionState state =
                 ZenithProgressionState.get(source.getServer());
 

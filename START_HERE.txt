@@ -1,28 +1,27 @@
-CHILL ZONE ZENITH - FIX 2
+CHILL ZONE ZENITH - FIX 3
 
-THIS VERSION FIXES THE "FAILED TO FIND OFFICIAL MOJANG MAPPINGS" ERROR.
+This version fixes the Java compile errors shown after Fix 2.
 
-WHAT TO DO:
+FIXED:
+- CommandSourceStack.hasPermission(int) was replaced with the Minecraft 26.2 permission API:
+  source.permissions().hasPermission(Permissions.COMMANDS_GAMEMASTER)
 
+- Old SavedData CompoundTag save/load overrides were removed.
+- Progression persistence now uses Minecraft 26.2's Codec + SavedDataType API.
+- The six branch switches are stored as one small integer bitmask.
+- computeIfAbsent now receives the SavedDataType directly.
+
+WHAT YOU DO:
 1. Download this ZIP.
-2. Right-click it -> Extract All.
+2. Extract All.
 3. Open the extracted folder.
-4. Open your GitHub repository.
-5. Delete the OLD project files from the GitHub repository, or replace them when uploading.
-6. Click Add file -> Upload files.
-7. Drag EVERYTHING FROM INSIDE this new extracted folder into GitHub.
-8. Click Commit changes.
-9. Click Actions.
-10. Open the newest "Build Chill Zone Zenith" run.
+4. Upload EVERYTHING INSIDE it to the SAME GitHub repository.
+5. Replace the old files when GitHub asks.
+6. Commit changes.
+7. Click Actions.
+8. Open the newest "Build Chill Zone Zenith" run.
 
-GREEN CHECK:
-The build worked. Download the artifact at the bottom.
+GREEN CHECK = send me a screenshot or download the artifact.
+RED X = send me the FIRST error section again.
 
-RED X:
-Send ChatGPT a screenshot of the FIRST red error section again.
-Do not try to repair the code yourself.
-
-WHY FIX 2 EXISTS:
-Minecraft 26.2 is no longer obfuscated. The old build.gradle incorrectly asked Loom
-to download official Mojang mapping files that do not exist for this version.
-This build uses Fabric's current Loom plugin and lets 26.2 use its native names directly.
+You do not need to edit Java yourself.

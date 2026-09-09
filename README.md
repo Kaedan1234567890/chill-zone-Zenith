@@ -78,3 +78,7 @@ so it survives server restarts.
 ## GitHub build
 
 This package includes `.github/workflows/build.yml`. After uploading the extracted contents to GitHub and committing them, the **Build Chill Zone Zenith** Action starts automatically. The compiled server mod is uploaded as the `chill-zone-zenith-mod` artifact.
+
+
+## Fix 3
+Updated command permissions and persistent SavedData code for the Minecraft 26.2 APIs.
