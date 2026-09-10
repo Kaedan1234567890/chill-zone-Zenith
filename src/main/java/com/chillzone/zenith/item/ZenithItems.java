@@ -11,6 +11,9 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.Item;
+import net.fabricmc.fabric.api.creativetab.v1.FabricCreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ToolMaterial;
 import net.minecraft.world.item.component.ItemLore;
 
@@ -215,7 +218,70 @@ public final class ZenithItems {
             "The five paths united into one ultimate weapon."
     );
 
+
+    public static final ResourceKey<CreativeModeTab> ZENITH_CREATIVE_TAB_KEY =
+            ResourceKey.create(
+                    BuiltInRegistries.CREATIVE_MODE_TAB.key(),
+                    Identifier.fromNamespaceAndPath(ZenithMod.MOD_ID, "zenith_tab")
+            );
+
+    public static final CreativeModeTab ZENITH_CREATIVE_TAB =
+            FabricCreativeModeTab.builder()
+                    .icon(() -> new ItemStack(ZENITH_BLADE))
+                    .title(Component.translatable("creativeTab.chillzonezenith"))
+                    .displayItems((parameters, output) -> {
+                        // Materials
+                        output.accept(ENDER_ESSENCE);
+                        output.accept(SHULKER_ESSENCE);
+                        output.accept(RAVAGER_HORN);
+                        output.accept(RAVAGER_HEART);
+                        output.accept(MANSION_KEY);
+                        output.accept(GUARDIAN_SCALE);
+                        output.accept(ELDER_GUARDIAN_CORE);
+                        output.accept(WARDEN_HEART);
+                        output.accept(BLAZING_CORE);
+                        output.accept(WITHERED_FRAGMENT);
+                        output.accept(PIGLIN_SIGIL);
+                        output.accept(BRUTES_EMBLEM);
+                        output.accept(GHAST_ESSENCE);
+
+                        // Ender
+                        output.accept(ENDER_BLADE);
+                        output.accept(SHULKER_BLADE);
+                        output.accept(ENDER_DRAGON_BLADE);
+
+                        // Ravager
+                        output.accept(SWORD_OF_UNDYING);
+                        output.accept(MANSION_BLADE);
+                        output.accept(RAVAGER_BLADE);
+
+                        // Guardian
+                        output.accept(PRISMARINE_BLADE);
+                        output.accept(SPONGE_BLADE);
+                        output.accept(ELDER_TIDE_BLADE);
+                        output.accept(ELDER_GUARDIAN_BLADE);
+
+                        // Warden
+                        output.accept(ECHO_BLADE);
+                        output.accept(WARDENS_WRATH);
+                        output.accept(WARDEN_BLADE);
+
+                        // Wither
+                        output.accept(BLADE_OF_FIRE);
+                        output.accept(GOLDEN_DESIRE);
+                        output.accept(GHOST_BLADE);
+                        output.accept(WITHER_BLADE);
+
+                        // Final
+                        output.accept(ZENITH_BLADE);
+                    })
+                    .build();
+
     public static void initialize() {
-        // Static registration above does the work.
+        Registry.register(
+                BuiltInRegistries.CREATIVE_MODE_TAB,
+                ZENITH_CREATIVE_TAB_KEY,
+                ZENITH_CREATIVE_TAB
+        );
     }
 }

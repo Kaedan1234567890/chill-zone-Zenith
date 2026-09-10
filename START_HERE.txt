@@ -1,39 +1,67 @@
-CHILL ZONE ZENITH - FIX 10
-ABILITY COMPILE FIX
+CHILL ZONE ZENITH - FIX 12 / BOSS DETECT
 
-This is the SAME Fix 9 ability-prototype build with the compile error corrected.
+THIS IS THE SAME MOD, UPDATED FROM FIX 11.
 
-ERROR FIXED:
-    cannot find symbol
-    method displayClientMessage(MutableComponent, boolean)
-    location: variable user of type Player
+NEW ADMIN COMMAND
+=================
+/zenith detect <category>
 
-Minecraft 26.2 changed this player message API.
-The mod now uses Player.sendSystemMessage(Component) for:
-- branch deactivated warnings
-- ability cooldown messages
-- ability activated confirmations
+The category auto-fills:
+ender
+ravager
+guardian
+warden
+wither
+zenith
 
-NOTHING ELSE WAS REMOVED.
+Examples:
+/zenith detect ender
+/zenith detect warden
+/zenith detect zenith
 
-THIS BUILD STILL INCLUDES:
-- working crafting system from Fix 8
-- branch activation gating
-- one-per-world Boss Blade crafting
-- automatic unlock when dropped Boss Blade item entities are destroyed
+WHAT IT CHECKS
+==============
+- ONLINE player inventories
+- ONLINE player Ender Chests
+- loaded dropped Boss Blade item entities
+
+It also tells you whether that Boss Blade craft lock is currently:
+LOCKED
+or
+AVAILABLE
+
+IMPORTANT
+=========
+This is a MANUAL inspection tool, not an automatic reset.
+
+If the command says the blade is not found, that does NOT prove the blade was
+destroyed. It may still be in:
+- an offline player's inventory
+- an offline player's Ender Chest
+- a chest or barrel
+- a shulker box
+- an unloaded chunk
+
+That is why /zenith resetboss <category> remains the final owner/admin decision.
+
+DESCRIPTIONS
+============
+Yes - the custom sword names, colours, descriptions, ability name, and cooldown
+tooltip from Fix 11 are still included.
+
+EVERYTHING FROM FIX 11 IS KEPT
+==============================
+- dedicated Zenith creative section
+- visual vanilla-style cooldowns
+- Warden Blade targeting/beam prototype
+- 15-lane one-shot Zenith Storm prototype
+- crafting/activation system
+- one-per-world Boss Blade locks
 - targeted /zenith give <targets> <item> <count>
-- coloured sword names
-- sword lore/tooltips
-- prototype abilities for every sword
-- Zenith Storm prototype
 - admin-only commands
 
-UPLOAD:
-1. Extract All.
-2. Upload everything INSIDE to the same GitHub repository.
-3. Replace the older files.
-4. Commit changes.
-5. Go to Actions.
-6. Test the newest build.
+BUILD
+=====
+Extract -> upload everything inside -> replace files -> Commit -> Actions.
 
-If red again, send the FIRST red error block.
+If GitHub is red, send the FIRST red compiler/error block.

@@ -15,18 +15,15 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
-import java.util.UUID;
 
 public class AbilitySwordItem extends Item {
-    private static final Map<String, Long> COOLDOWNS = new HashMap<>();
 
     private final ZenithAbility ability;
     private final ZenithCategory category;
@@ -63,22 +60,14 @@ public class AbilitySwordItem extends Item {
             );
             return InteractionResult.FAIL;
         }
+        ItemStack heldStack = user.getItemInHand(hand);
 
-        String cooldownKey = user.getUUID() + ":" + this.ability.name();
-        long now = serverLevel.getGameTime();
-        long readyAt = COOLDOWNS.getOrDefault(cooldownKey, 0L);
-
-        if (now < readyAt) {
-            long seconds = Math.max(1L, (readyAt - now + 19L) / 20L);
-            user.sendSystemMessage(
-                    Component.literal("Ability ready in " + seconds + "s")
-                            .withStyle(ChatFormatting.GRAY)
-            );
+        if (user.getCooldowns().isOnCooldown(heldStack)) {
             return InteractionResult.FAIL;
         }
 
         activate(serverLevel, user);
-        COOLDOWNS.put(cooldownKey, now + this.ability.cooldownTicks());
+        user.getCooldowns().addCooldown(heldStack, this.ability.cooldownTicks());
 
         user.sendSystemMessage(
                 Component.literal(abilityDisplayName() + " activated!")
@@ -169,11 +158,26 @@ public class AbilitySwordItem extends Item {
                 sonicTrail(level, user, 22.0);
             }
             case SONIC_DEVASTATION -> {
-                for (LivingEntity target : coneTargets(level, user, 16.0, 0.45)) {
-                    damage(level, user, target, 17.0F);
-                    Vec3 push = target.position().subtract(user.position()).normalize().scale(1.5);
-                    target.push(push.x, 0.45, push.z);
+                // Warden Blade prototype:
+                // 1) reveal nearby living targets,
+                // 2) give the wielder 2.5 seconds to aim,
+                // 3) fire a 15-block Warden beam along the CURRENT aim direction.
+                for (LivingEntity target : nearby(level, user, 18.0)) {
+                    target.addEffect(new MobEffectInstance(MobEffects.GLOWING, 60, 0));
                 }
+
+                level.sendParticles(
+                        ParticleTypes.SCULK_SOUL,
+                        user.getX(), user.getY() + 1.0, user.getZ(),
+                        45,
+                        2.5, 1.2, 2.5,
+                        0.03
+                );
+
+                if (user instanceof ServerPlayer serverPlayer) {
+                    ZenithAbilityScheduler.scheduleWardenBeam(serverPlayer, 50);
+                }
+            }
                 sonicTrail(level, user, 16.0);
             }
 
@@ -215,11 +219,20 @@ public class AbilitySwordItem extends Item {
             }
 
             case ZENITH_STORM -> {
-                // Prototype spectral-blade storm: five successive damage lanes.
-                double[] offsets = {-1.2, -0.6, 0.0, 0.6, 1.2};
-                for (double offset : offsets) {
-                    zenithLane(level, user, offset);
+                // Fifteen simultaneous spectral lanes:
+                // 7 left + centre + 7 right.
+                for (int lane = -7; lane <= 7; lane++) {
+                    zenithLane(level, user, lane * 0.65);
                 }
+
+                level.sendParticles(
+                        ParticleTypes.END_ROD,
+                        user.getX(), user.getEyeY(), user.getZ(),
+                        100,
+                        1.8, 1.1, 1.8,
+                        0.12
+                );
+            }
                 level.sendParticles(ParticleTypes.END_ROD,
                         user.getX(), user.getEyeY(), user.getZ(),
                         70, 1.4, 1.0, 1.4, 0.1);
@@ -237,7 +250,22 @@ public class AbilitySwordItem extends Item {
         if (!this.uniqueBoss) return;
         if (!(itemEntity.level() instanceof ServerLevel serverLevel)) return;
 
-        ZenithProgressionState.get(serverLevel.getServer()).resetBossCrafted(this.category);
+        ZenithProgressionState state =
+                ZenithProgressionState.get(serverLevel.getServer());
+
+        if (this.category == ZenithCategory.ZENITH) {
+            // The five Boss Blades were consumed to make Zenith.
+            // While Zenith exists, all six unique locks remain active.
+            // If Zenith is genuinely destroyed as an ItemEntity, release all six.
+            state.resetBossCrafted(ZenithCategory.ENDER);
+            state.resetBossCrafted(ZenithCategory.RAVAGER);
+            state.resetBossCrafted(ZenithCategory.GUARDIAN);
+            state.resetBossCrafted(ZenithCategory.WARDEN);
+            state.resetBossCrafted(ZenithCategory.WITHER);
+            state.resetBossCrafted(ZenithCategory.ZENITH);
+        } else {
+            state.resetBossCrafted(this.category);
+        }
     }
 
     private void damage(ServerLevel level, Player attacker, LivingEntity target, float amount) {
@@ -426,7 +454,7 @@ public class AbilitySwordItem extends Item {
                     hitBox,
                     entity -> entity != user && entity.isAlive()
             )) {
-                damage(level, user, target, 10.0F);
+                damage(level, user, target, 10000.0F);
             }
         }
     }

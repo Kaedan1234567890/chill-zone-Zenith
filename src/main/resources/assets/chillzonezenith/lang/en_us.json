@@ -35,5 +35,6 @@
   "block.chillzonezenith.guardian_crafting_table": "Guardian Crafting Table",
   "block.chillzonezenith.warden_crafting_table": "Warden Crafting Table",
   "block.chillzonezenith.wither_crafting_table": "Wither Crafting Table",
-  "block.chillzonezenith.zenith_crafting_table": "Zenith Crafting Table"
+  "block.chillzonezenith.zenith_crafting_table": "Zenith Crafting Table",
+  "creativeTab.chillzonezenith": "Zenith"
 }

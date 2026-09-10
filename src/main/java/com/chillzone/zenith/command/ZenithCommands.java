@@ -16,6 +16,8 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.permissions.Permissions;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.Container;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -76,6 +78,19 @@ public final class ZenithCommands {
                                         StringArgumentType.getString(ctx, "item"),
                                         IntegerArgumentType.getInteger(ctx, "count")
                                     ))))))
+                    .then(Commands.literal("detect")
+                        .then(Commands.argument("category", StringArgumentType.word())
+                            .suggests((ctx, builder) -> {
+                                for (ZenithCategory category : ZenithCategory.values()) {
+                                    builder.suggest(category.id());
+                                }
+                                return builder.buildFuture();
+                            })
+                            .executes(ctx -> detectBossBlade(
+                                ctx.getSource(),
+                                StringArgumentType.getString(ctx, "category")
+                            ))))
+
                     .then(Commands.literal("resetboss")
                         .then(Commands.argument("category", StringArgumentType.word())
                             .suggests((ctx, builder) -> {
@@ -156,6 +171,146 @@ public final class ZenithCommands {
         );
 
         return count;
+    }
+
+
+    private static int detectBossBlade(CommandSourceStack source, String rawCategory) {
+        ZenithCategory category = ZenithCategory.fromId(rawCategory).orElse(null);
+
+        if (category == null) {
+            source.sendFailure(Component.literal("[Zenith] Unknown category: " + rawCategory));
+            return 0;
+        }
+
+        String bossPath = switch (category) {
+            case ENDER -> "ender_dragon_blade";
+            case RAVAGER -> "ravager_blade";
+            case GUARDIAN -> "elder_guardian_blade";
+            case WARDEN -> "warden_blade";
+            case WITHER -> "wither_blade";
+            case ZENITH -> "zenith_blade";
+        };
+
+        Identifier bossId = Identifier.fromNamespaceAndPath(ZenithMod.MOD_ID, bossPath);
+        int visibleCopies = 0;
+
+        source.sendSuccess(
+                () -> Component.literal("----- Zenith Detect: " + category.id() + " -----"),
+                false
+        );
+
+        for (ServerPlayer player : source.getServer().getPlayerList().getPlayers()) {
+            int inv = countInContainer(player.getInventory(), bossId);
+            int ender = countInContainer(player.getEnderChestInventory(), bossId);
+
+            if (inv > 0) {
+                visibleCopies += inv;
+                int found = inv;
+                source.sendSuccess(
+                        () -> Component.literal(
+                                "FOUND " + found + "x in "
+                                        + player.getGameProfile().name()
+                                        + "'s inventory"
+                        ),
+                        false
+                );
+            }
+
+            if (ender > 0) {
+                visibleCopies += ender;
+                int found = ender;
+                source.sendSuccess(
+                        () -> Component.literal(
+                                "FOUND " + found + "x in "
+                                        + player.getGameProfile().name()
+                                        + "'s Ender Chest"
+                        ),
+                        false
+                );
+            }
+        }
+
+        for (var level : source.getServer().getAllLevels()) {
+            for (ItemEntity dropped : level.getAllEntities().stream()
+                    .filter(entity -> entity instanceof ItemEntity)
+                    .map(entity -> (ItemEntity) entity)
+                    .toList()) {
+
+                if (stackIs(dropped.getItem(), bossId)) {
+                    int found = dropped.getItem().getCount();
+                    visibleCopies += found;
+
+                    source.sendSuccess(
+                            () -> Component.literal(
+                                    "FOUND " + found + "x dropped at "
+                                            + dropped.blockPosition().toShortString()
+                            ),
+                            false
+                    );
+                }
+            }
+        }
+
+        ZenithProgressionState state =
+                ZenithProgressionState.get(source.getServer());
+
+        int finalVisibleCopies = visibleCopies;
+
+        if (visibleCopies == 0) {
+            source.sendSuccess(
+                    () -> Component.literal(
+                            "No visible copy found in ONLINE player inventories, "
+                                    + "ONLINE Ender Chests, or loaded dropped items."
+                    ),
+                    false
+            );
+        } else {
+            source.sendSuccess(
+                    () -> Component.literal(
+                            "Visible copies found: " + finalVisibleCopies
+                    ),
+                    false
+            );
+        }
+
+        source.sendSuccess(
+                () -> Component.literal(
+                        "Craft lock: "
+                                + (state.isBossCrafted(category) ? "LOCKED" : "AVAILABLE")
+                ),
+                false
+        );
+
+        source.sendSuccess(
+                () -> Component.literal(
+                        "Note: this does NOT scan offline players, chests, barrels, "
+                                + "shulker boxes, or unloaded chunks."
+                ),
+                false
+        );
+
+        return visibleCopies > 0 ? 1 : 0;
+    }
+
+    private static int countInContainer(Container container, Identifier itemId) {
+        int count = 0;
+
+        for (int i = 0; i < container.getContainerSize(); i++) {
+            ItemStack stack = container.getItem(i);
+
+            if (stackIs(stack, itemId)) {
+                count += stack.getCount();
+            }
+        }
+
+        return count;
+    }
+
+    private static boolean stackIs(ItemStack stack, Identifier itemId) {
+        if (stack == null || stack.isEmpty()) return false;
+
+        Identifier actual = BuiltInRegistries.ITEM.getKey(stack.getItem());
+        return itemId.equals(actual);
     }
 
     private static int setCategory(
