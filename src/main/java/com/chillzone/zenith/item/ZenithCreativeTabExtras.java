@@ -1,20 +1,13 @@
 package com.chillzone.zenith.item;
 
-import com.chillzone.zenith.block.ZenithBlocks;
-import net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents;
-
+/**
+ * Compatibility stub kept so older repository copies of this file are overwritten.
+ * The real Zenith creative tab is built directly in ZenithItems.
+ */
 public final class ZenithCreativeTabExtras {
     private ZenithCreativeTabExtras() {}
 
     public static void initialize() {
-        CreativeModeTabEvents.modifyEntries(ZenithItems.ZENITH_CREATIVE_TAB)
-                .register(output -> {
-                    output.accept(ZenithBlocks.ENDER_CRAFTING_TABLE);
-                    output.accept(ZenithBlocks.RAVAGER_CRAFTING_TABLE);
-                    output.accept(ZenithBlocks.GUARDIAN_CRAFTING_TABLE);
-                    output.accept(ZenithBlocks.WARDEN_CRAFTING_TABLE);
-                    output.accept(ZenithBlocks.WITHER_CRAFTING_TABLE);
-                    output.accept(ZenithBlocks.ZENITH_CRAFTING_TABLE);
-                });
+        // Intentionally empty.
     }
 }

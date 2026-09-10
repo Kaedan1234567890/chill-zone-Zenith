@@ -1,50 +1,27 @@
-CHILL ZONE ZENITH - FIX 17
-CREATIVE TAB FINAL FIX
+CHILL ZONE ZENITH - FIX 18
+STALE GITHUB FILE FIX
 
-This is the SAME MOD moving forward from Fix 16.
+YOUR SCREENSHOT SHOWS THE REAL PROBLEM:
+GitHub is still compiling ZenithCreativeTabExtras.java.
 
-WHY FIX 16 STILL FAILED
-=======================
-The problem was not the argument passed into modifyEntries().
-In your Fabric 26.2 setup, CreativeModeTabEvents does not expose that
-modifyEntries(...) method at all.
+That file was removed from Fix 17, but GitHub browser uploads do not delete
+old files that are no longer present in a newer folder.
 
-So I stopped trying to patch that API.
+Fix 18 solves this by putting ZenithCreativeTabExtras.java back as a SAFE,
+EMPTY compatibility file. Uploading Fix 18 will overwrite the stale broken copy.
 
-WHAT FIX 17 DOES
-================
-- Completely removes ZenithCreativeTabExtras.java.
-- Completely removes CreativeModeTabEvents.
-- Completely removes modifyEntries(...).
-- Adds the six crafting-table blocks DIRECTLY inside the existing
-  FabricCreativeModeTab.builder().displayItems(...) block.
+The real Zenith creative tab remains in ZenithItems.
 
-That is the same structure shown in Fabric's 26.2 custom creative-tab
-documentation: the builder itself can accept both Items and Blocks.
+WHAT TO DO
+==========
+1. Download Fix 18.
+2. Extract All.
+3. Upload EVERYTHING INSIDE to the same GitHub repository.
+4. Let GitHub overwrite the matching files.
+5. Commit changes.
+6. Open Actions.
 
-I also checked the ENTIRE Java source and confirmed there are ZERO remaining:
-    CreativeModeTabEvents
-    modifyEntries(
-    ZenithCreativeTabExtras
+DO NOT manually delete anything this time.
+This package is specifically designed to overwrite the stale file safely.
 
-NOTHING ELSE WAS REMOVED
-========================
-You still have:
-- dedicated Zenith Creative tab
-- all custom materials/swords/tables
-- /zenith detect
-- /zenith resetboss
-- /zenith give <targets> <item> <count>
-- crafting and activation gating
-- one-per-world Boss Blade locks
-- visual cooldowns
-- Warden beam prototype
-- 15-lane one-shot Zenith Storm
-- custom names/lore/descriptions
-- all other ability prototypes
-
-BUILD
-=====
-Extract -> upload EVERYTHING INSIDE -> replace old files -> Commit -> Actions.
-
-If GitHub is red again, send the FIRST red error block.
+If the build turns red again, send the FIRST red compiler block.
