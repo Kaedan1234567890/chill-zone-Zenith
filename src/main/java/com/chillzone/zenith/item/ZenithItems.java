@@ -1,6 +1,7 @@
 package com.chillzone.zenith.item;
 
 import com.chillzone.zenith.ZenithMod;
+import com.chillzone.zenith.block.ZenithBlocks;
 import com.chillzone.zenith.progression.ZenithCategory;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Registry;
@@ -274,6 +275,16 @@ public final class ZenithItems {
 
                         // Final
                         output.accept(ZENITH_BLADE);
+
+                        // Custom crafting stations
+                        // Fabric 26.2 supports adding Blocks directly in the
+                        // custom creative-tab builder.
+                        output.accept(ZenithBlocks.ENDER_CRAFTING_TABLE);
+                        output.accept(ZenithBlocks.RAVAGER_CRAFTING_TABLE);
+                        output.accept(ZenithBlocks.GUARDIAN_CRAFTING_TABLE);
+                        output.accept(ZenithBlocks.WARDEN_CRAFTING_TABLE);
+                        output.accept(ZenithBlocks.WITHER_CRAFTING_TABLE);
+                        output.accept(ZenithBlocks.ZENITH_CRAFTING_TABLE);
                     })
                     .build();
 
