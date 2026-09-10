@@ -65,9 +65,9 @@ public final class ZenithItems {
                         DataComponents.LORE,
                         new ItemLore(List.of(
                                 Component.literal(description).withStyle(ChatFormatting.GRAY),
-                                Component.literal("Right Click: " + abilityName(ability))
+                                Component.literal("Right Click: " + abilityDetails(ability))
                                         .withStyle(ChatFormatting.AQUA),
-                                Component.literal("Cooldown: " + ability.cooldownSeconds() + "s")
+                                Component.literal("Cooldown: " + formatCooldown(ability.cooldownSeconds()))
                                         .withStyle(ChatFormatting.DARK_GRAY)
                         ))
                 );
@@ -99,6 +99,35 @@ public final class ZenithItems {
             case GHAST_FIREBALL -> "Ghast Fireball";
             case WITHERING_BARRAGE -> "Withering Barrage";
             case ZENITH_STORM -> "Zenith Storm";
+        };
+    }
+
+
+    private static String formatCooldown(int seconds) {
+        if (seconds >= 60 && seconds % 60 == 0) return (seconds / 60) + " minutes";
+        return seconds + "s";
+    }
+
+    private static String abilityDetails(ZenithAbility ability) {
+        return switch (ability) {
+            case ENDER_STEP -> "Ender Step - blink 4 blocks forward.";
+            case SHULKER_SHOT -> "Shulker Escape - blink 5 blocks back + 2 sideways.";
+            case DRAGON_WARP -> "Dragon Warp - moving: 12-block damaging leap; still: breath burst + escape.";
+            case LAST_STAND -> "Last Stand - Absorption VIII for 8 seconds.";
+            case VEX_CALL -> "Mansion Rush - Speed III + Strength III for 8 seconds.";
+            case RAVAGER_CHARGE -> "Ravager Charge - ram forward, heavy hit, then Speed III + Strength III for 5 seconds.";
+            case GUARDIAN_RAY -> "Guardian Ray - marks your target with Mining Fatigue for 10 seconds.";
+            case TIDAL_BURST -> "Tidal Burst - wave pushes nearby enemies away without direct damage.";
+            case ELDER_CURSE -> "Drowning Curse - nearby enemies in water immediately lose their air.";
+            case WRATH_OF_MONUMENT -> "Monument Wrath - 8-block knockback + Mining Fatigue and Slowness.";
+            case ECHO_SENSE -> "Echo Sense - reveal living targets within 18 blocks.";
+            case SONIC_BOOM -> "Weak Sonic Boom - focused sonic hit; roughly four hits to defeat an unarmoured player.";
+            case SONIC_DEVASTATION -> "Sonic Devastation - reveal targets, then fire a powerful delayed sonic beam.";
+            case INFERNO -> "Inferno - ignite nearby enemies; damage comes from fire.";
+            case GOLDEN_RUSH -> "Golden Rush - gain Speed II + Haste II for 12 seconds.";
+            case GHAST_FIREBALL -> "Ghost Fireball - focused mini fireball hit + brief burning; no terrain destruction.";
+            case WITHERING_BARRAGE -> "Wither Shot - one focused Wither-skull style strike, about half base health unarmoured.";
+            case ZENITH_STORM -> "Zenith Storm - 15 simultaneous lethal lanes; designed to trigger Totems.";
         };
     }
 
@@ -231,7 +260,36 @@ public final class ZenithItems {
                     .icon(() -> new ItemStack(ZENITH_BLADE))
                     .title(Component.translatable("creativeTab.chillzonezenith"))
                     .displayItems((parameters, output) -> {
-                        // Materials
+                    
+    private static String formatCooldown(int seconds) {
+        if (seconds >= 60 && seconds % 60 == 0) return (seconds / 60) + " minutes";
+        return seconds + "s";
+    }
+
+    private static String abilityDetails(ZenithAbility ability) {
+        return switch (ability) {
+            case ENDER_STEP -> "Ender Step - blink 4 blocks forward.";
+            case SHULKER_SHOT -> "Shulker Escape - blink 5 blocks back + 2 sideways.";
+            case DRAGON_WARP -> "Dragon Warp - moving: 12-block damaging leap; still: breath burst + escape.";
+            case LAST_STAND -> "Last Stand - Absorption VIII for 8 seconds.";
+            case VEX_CALL -> "Mansion Rush - Speed III + Strength III for 8 seconds.";
+            case RAVAGER_CHARGE -> "Ravager Charge - ram forward, heavy hit, then Speed III + Strength III for 5 seconds.";
+            case GUARDIAN_RAY -> "Guardian Ray - marks your target with Mining Fatigue for 10 seconds.";
+            case TIDAL_BURST -> "Tidal Burst - wave pushes nearby enemies away without direct damage.";
+            case ELDER_CURSE -> "Drowning Curse - nearby enemies in water immediately lose their air.";
+            case WRATH_OF_MONUMENT -> "Monument Wrath - 8-block knockback + Mining Fatigue and Slowness.";
+            case ECHO_SENSE -> "Echo Sense - reveal living targets within 18 blocks.";
+            case SONIC_BOOM -> "Weak Sonic Boom - focused sonic hit; roughly four hits to defeat an unarmoured player.";
+            case SONIC_DEVASTATION -> "Sonic Devastation - reveal targets, then fire a powerful delayed sonic beam.";
+            case INFERNO -> "Inferno - ignite nearby enemies; damage comes from fire.";
+            case GOLDEN_RUSH -> "Golden Rush - gain Speed II + Haste II for 12 seconds.";
+            case GHAST_FIREBALL -> "Ghost Fireball - focused mini fireball hit + brief burning; no terrain destruction.";
+            case WITHERING_BARRAGE -> "Wither Shot - one focused Wither-skull style strike, about half base health unarmoured.";
+            case ZENITH_STORM -> "Zenith Storm - 15 simultaneous lethal lanes; designed to trigger Totems.";
+        };
+    }
+
+    // Materials
                         output.accept(ENDER_ESSENCE);
                         output.accept(SHULKER_ESSENCE);
                         output.accept(RAVAGER_HORN);

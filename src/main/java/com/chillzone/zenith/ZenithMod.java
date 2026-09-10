@@ -2,6 +2,7 @@ package com.chillzone.zenith;
 
 import com.chillzone.zenith.block.ZenithBlocks;
 import com.chillzone.zenith.command.ZenithCommands;
+import com.chillzone.zenith.drop.ZenithMobDrops;
 import com.chillzone.zenith.item.ZenithItems;
 import com.chillzone.zenith.item.ZenithCreativeTabExtras;
 import com.chillzone.zenith.item.ZenithAbilityScheduler;
@@ -17,5 +18,6 @@ public final class ZenithMod implements ModInitializer {
         ZenithCreativeTabExtras.initialize();
         ZenithAbilityScheduler.initialize();
         ZenithCommands.register();
+        ZenithMobDrops.initialize();
     }
 }

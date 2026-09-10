@@ -97,7 +97,7 @@ public final class ZenithAbilityScheduler {
             best.hurtServer(
                     level,
                     player.damageSources().playerAttack(player),
-                    18.0F
+                    10.0F
             );
 
             Vec3 push = best.position().subtract(player.position()).normalize().scale(1.4);

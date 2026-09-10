@@ -19,6 +19,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 
 import java.util.List;
 import java.util.Set;
@@ -62,12 +64,16 @@ public class AbilitySwordItem extends Item {
         }
         ItemStack heldStack = user.getItemInHand(hand);
 
-        if (user.getCooldowns().isOnCooldown(heldStack)) {
+        boolean testMode = ZenithTestMode.isTesting(user.getUUID());
+
+        if (!testMode && user.getCooldowns().isOnCooldown(heldStack)) {
             return InteractionResult.FAIL;
         }
 
         activate(serverLevel, user);
-        user.getCooldowns().addCooldown(heldStack, this.ability.cooldownTicks());
+        if (!testMode) {
+            user.getCooldowns().addCooldown(heldStack, this.ability.cooldownTicks());
+        }
 
         user.sendSystemMessage(
                 Component.literal(abilityDisplayName() + " activated!")
@@ -79,69 +85,91 @@ public class AbilitySwordItem extends Item {
 
     private void activate(ServerLevel level, Player user) {
         switch (this.ability) {
-            case ENDER_STEP -> teleportForward(level, user, 8.0);
+            case ENDER_STEP -> {
+                teleportForward(level, user, 4.0);
+                play(level, user, SoundEvents.ENDERMAN_TELEPORT, 0.8F, 1.25F);
+            }
             case SHULKER_SHOT -> {
-                LivingEntity target = targetInFront(level, user, 18.0);
-                if (target != null) {
-                    target.addEffect(new MobEffectInstance(MobEffects.LEVITATION, 60, 0));
-                    damage(level, user, target, 5.0F);
-                }
-                portalTrail(level, user, 12.0);
+                // Escape tool: blink backwards/sideways at the same height.
+                Vec3 look = horizontalLook(user);
+                Vec3 side = new Vec3(-look.z, 0.0, look.x);
+                Vec3 escape = user.position().subtract(look.scale(5.0)).add(side.scale(2.0));
+                teleportTo(level, user, escape);
+                portalBurst(level, escape, 28);
+                play(level, user, SoundEvents.SHULKER_TELEPORT, 1.0F, 1.1F);
             }
             case DRAGON_WARP -> {
-                teleportForward(level, user, 12.0);
-                blast(level, user, 4.5, 10.0F, 1.4);
-                portalBurst(level, user.position(), 45);
+                Vec3 horizontal = new Vec3(user.getDeltaMovement().x, 0.0, user.getDeltaMovement().z);
+                if (horizontal.lengthSqr() > 0.01) {
+                    teleportForward(level, user, 12.0);
+                    blast(level, user, 4.5, 10.0F, 1.4);
+                } else {
+                    // Standing still: breath burst, then escape backwards.
+                    for (LivingEntity target : coneTargets(level, user, 8.0, 0.72)) {
+                        damage(level, user, target, 8.0F);
+                    }
+                    portalTrail(level, user, 8.0);
+                    Vec3 escape = user.position().subtract(horizontalLook(user).scale(6.0));
+                    teleportTo(level, user, escape);
+                }
+                play(level, user, SoundEvents.ENDER_DRAGON_GROWL, 1.0F, 1.15F);
             }
 
             case LAST_STAND -> {
-                if (user.getHealth() <= 8.0F) {
-                    user.addEffect(new MobEffectInstance(MobEffects.RESISTANCE, 160, 1));
-                    user.addEffect(new MobEffectInstance(MobEffects.ABSORPTION, 160, 1));
-                } else {
-                    user.addEffect(new MobEffectInstance(MobEffects.ABSORPTION, 100, 0));
-                }
+                // Absorption VIII for 8 seconds: strong protection, no direct damage.
+                user.addEffect(new MobEffectInstance(MobEffects.ABSORPTION, 160, 7));
+                play(level, user, SoundEvents.TOTEM_USE, 0.8F, 1.2F);
             }
             case VEX_CALL -> {
                 // Prototype: spectral "assist" represented by temporary combat buffs.
-                user.addEffect(new MobEffectInstance(MobEffects.STRENGTH, 160, 0));
-                user.addEffect(new MobEffectInstance(MobEffects.SPEED, 160, 0));
+                user.addEffect(new MobEffectInstance(MobEffects.STRENGTH, 160, 2));
+                user.addEffect(new MobEffectInstance(MobEffects.SPEED, 160, 2));
                 level.sendParticles(ParticleTypes.SOUL_FIRE_FLAME,
                         user.getX(), user.getY() + 1.0, user.getZ(),
                         25, 1.2, 1.0, 1.2, 0.03);
+                play(level, user, SoundEvents.EVOKER_CAST_SPELL, 1.0F, 1.1F);
             }
             case RAVAGER_CHARGE -> {
                 Vec3 look = horizontalLook(user).scale(1.8);
                 user.setDeltaMovement(look.x, 0.35, look.z);
                 user.hurtMarked = true;
-                blast(level, user, 3.0, 12.0F, 2.2);
+                blast(level, user, 3.0, 10.0F, 2.2);
+                user.addEffect(new MobEffectInstance(MobEffects.STRENGTH, 100, 2));
+                user.addEffect(new MobEffectInstance(MobEffects.SPEED, 100, 2));
+                play(level, user, SoundEvents.RAVAGER_ROAR, 1.0F, 1.1F);
             }
 
             case GUARDIAN_RAY -> {
                 LivingEntity target = targetInFront(level, user, 22.0);
-                if (target != null) damage(level, user, target, 9.0F);
+                if (target != null) {
+                    target.addEffect(new MobEffectInstance(MobEffects.MINING_FATIGUE, 200, 1));
+                }
                 prismarineTrail(level, user, 20.0);
+                play(level, user, SoundEvents.GUARDIAN_ATTACK, 0.9F, 1.2F);
             }
             case TIDAL_BURST -> {
-                blast(level, user, 5.0, 7.0F, 2.0);
+                pushAway(level, user, 6.0, 1.35);
                 level.sendParticles(ParticleTypes.SPLASH,
                         user.getX(), user.getY() + 0.5, user.getZ(),
                         60, 2.5, 1.0, 2.5, 0.12);
             }
             case ELDER_CURSE -> {
-                for (LivingEntity target : nearby(level, user, 10.0)) {
-                    target.addEffect(new MobEffectInstance(MobEffects.MINING_FATIGUE, 180, 1));
-                    target.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, 120, 1));
+                for (LivingEntity target : nearby(level, user, 12.0)) {
+                    if (target.isInWaterOrRain()) {
+                        target.setAirSupply(0);
+                    }
                 }
+                play(level, user, SoundEvents.ELDER_GUARDIAN_CURSE, 1.0F, 1.0F);
             }
             case WRATH_OF_MONUMENT -> {
+                pushAway(level, user, 8.0, 1.8);
                 LivingEntity target = targetInFront(level, user, 26.0);
                 if (target != null) {
-                    damage(level, user, target, 15.0F);
-                    target.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, 120, 1));
+                    target.addEffect(new MobEffectInstance(MobEffects.MINING_FATIGUE, 200, 2));
+                    target.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, 200, 1));
                 }
-                blast(level, user, 5.0, 6.0F, 1.7);
                 prismarineTrail(level, user, 24.0);
+                play(level, user, SoundEvents.ELDER_GUARDIAN_CURSE, 1.0F, 0.85F);
             }
 
             case ECHO_SENSE -> {
@@ -151,10 +179,11 @@ public class AbilitySwordItem extends Item {
                 level.sendParticles(ParticleTypes.SCULK_SOUL,
                         user.getX(), user.getY() + 1.0, user.getZ(),
                         35, 2.0, 1.0, 2.0, 0.02);
+                play(level, user, SoundEvents.SCULK_SENSOR_CLICKING, 1.0F, 1.0F);
             }
             case SONIC_BOOM -> {
                 LivingEntity target = targetInFront(level, user, 24.0);
-                if (target != null) damage(level, user, target, 13.0F);
+                if (target != null) damage(level, user, target, 5.0F);
                 sonicTrail(level, user, 22.0);
             }
             case SONIC_DEVASTATION -> {
@@ -181,7 +210,6 @@ public class AbilitySwordItem extends Item {
 
             case INFERNO -> {
                 for (LivingEntity target : nearby(level, user, 5.0)) {
-                    damage(level, user, target, 7.0F);
                     target.igniteForSeconds(5.0F);
                 }
                 level.sendParticles(ParticleTypes.FLAME,
@@ -191,29 +219,28 @@ public class AbilitySwordItem extends Item {
             case GOLDEN_RUSH -> {
                 user.addEffect(new MobEffectInstance(MobEffects.SPEED, 240, 1));
                 user.addEffect(new MobEffectInstance(MobEffects.HASTE, 240, 1));
+                play(level, user, SoundEvents.PIGLIN_CELEBRATE, 0.8F, 1.2F);
             }
             case GHAST_FIREBALL -> {
                 // Prototype: ray-hit version; terrain is never damaged.
                 LivingEntity target = targetInFront(level, user, 28.0);
                 if (target != null) {
-                    damage(level, user, target, 11.0F);
-                    target.igniteForSeconds(3.0F);
+                    damage(level, user, target, 5.0F);
+                    target.igniteForSeconds(4.0F);
                 }
                 level.sendParticles(ParticleTypes.FLAME,
                         user.getX(), user.getEyeY(), user.getZ(),
                         20, 0.3, 0.3, 0.3, 0.04);
             }
             case WITHERING_BARRAGE -> {
-                List<LivingEntity> targets = coneTargets(level, user, 22.0, 0.72);
-                int hit = 0;
-                for (LivingEntity target : targets) {
-                    damage(level, user, target, 7.0F);
-                    target.addEffect(new MobEffectInstance(MobEffects.WITHER, 120, 1));
-                    if (++hit >= 3) break;
+                // Boss version: one focused Wither-skull style shot, ~half base health unarmoured.
+                LivingEntity target = targetInFront(level, user, 28.0);
+                if (target != null) {
+                    damage(level, user, target, 10.0F);
+                    target.addEffect(new MobEffectInstance(MobEffects.WITHER, 80, 0));
                 }
-                level.sendParticles(ParticleTypes.SOUL,
-                        user.getX(), user.getEyeY(), user.getZ(),
-                        35, 1.0, 0.8, 1.0, 0.04);
+                trail(level, user, 28.0, ParticleTypes.SOUL);
+                play(level, user, SoundEvents.WITHER_SHOOT, 1.0F, 1.0F);
             }
 
             case ZENITH_STORM -> {
@@ -260,6 +287,32 @@ public class AbilitySwordItem extends Item {
         } else {
             state.resetBossCrafted(this.category);
         }
+    }
+
+
+    private void teleportTo(ServerLevel level, Player user, Vec3 destination) {
+        if (user instanceof ServerPlayer serverPlayer) {
+            serverPlayer.teleportTo(
+                    level, destination.x, destination.y, destination.z,
+                    Set.of(), user.getYRot(), user.getXRot(), false
+            );
+        } else {
+            user.setPos(destination);
+        }
+    }
+
+    private void pushAway(ServerLevel level, Player user, double radius, double strength) {
+        for (LivingEntity target : nearby(level, user, radius)) {
+            Vec3 delta = target.position().subtract(user.position());
+            Vec3 flat = new Vec3(delta.x, 0.0, delta.z);
+            if (flat.lengthSqr() < 0.001) flat = new Vec3(0, 0, 1);
+            flat = flat.normalize().scale(strength);
+            target.push(flat.x, 0.18, flat.z);
+        }
+    }
+
+    private void play(ServerLevel level, Player user, net.minecraft.sounds.SoundEvent sound, float volume, float pitch) {
+        level.playSound(null, user.blockPosition(), sound, SoundSource.PLAYERS, volume, pitch);
     }
 
     private void damage(ServerLevel level, Player attacker, LivingEntity target, float amount) {

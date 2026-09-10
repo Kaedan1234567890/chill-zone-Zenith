@@ -3,6 +3,7 @@ package com.chillzone.zenith.command;
 import com.chillzone.zenith.ZenithMod;
 import com.chillzone.zenith.progression.ZenithCategory;
 import com.chillzone.zenith.progression.ZenithProgressionState;
+import com.chillzone.zenith.item.ZenithTestMode;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
@@ -36,6 +37,12 @@ public final class ZenithCommands {
 
                     .then(Commands.literal("status")
                         .executes(ctx -> showStatus(ctx.getSource())))
+
+                    .then(Commands.literal("test")
+                        .executes(ctx -> setTestMode(ctx.getSource(), true)))
+
+                    .then(Commands.literal("untest")
+                        .executes(ctx -> setTestMode(ctx.getSource(), false)))
 
                     .then(Commands.literal("activate")
                         .then(categoryArgument(true)))
@@ -364,6 +371,29 @@ public final class ZenithCommands {
                 true
         );
 
+        return 1;
+    }
+
+
+    private static int setTestMode(CommandSourceStack source, boolean enabled) {
+        ServerPlayer player;
+        try {
+            player = source.getPlayerOrException();
+        } catch (Exception exception) {
+            source.sendFailure(Component.literal("[Zenith] This command must be run by a player."));
+            return 0;
+        }
+
+        if (enabled) {
+            ZenithTestMode.enable(player.getUUID());
+        } else {
+            ZenithTestMode.disable(player.getUUID());
+        }
+
+        source.sendSuccess(
+                () -> Component.literal("[Zenith] Test mode " + (enabled ? "ON - Zenith cooldowns are ignored." : "OFF - normal cooldowns restored.")),
+                false
+        );
         return 1;
     }
 
