@@ -57,10 +57,9 @@ public class AbilitySwordItem extends Item {
         ZenithProgressionState state = ZenithProgressionState.get(serverLevel.getServer());
 
         if (!state.isEnabled(this.category)) {
-            user.displayClientMessage(
+            user.sendSystemMessage(
                     Component.literal("This Zenith branch is currently deactivated.")
-                            .withStyle(ChatFormatting.RED),
-                    true
+                            .withStyle(ChatFormatting.RED)
             );
             return InteractionResult.FAIL;
         }
@@ -71,10 +70,9 @@ public class AbilitySwordItem extends Item {
 
         if (now < readyAt) {
             long seconds = Math.max(1L, (readyAt - now + 19L) / 20L);
-            user.displayClientMessage(
+            user.sendSystemMessage(
                     Component.literal("Ability ready in " + seconds + "s")
-                            .withStyle(ChatFormatting.GRAY),
-                    true
+                            .withStyle(ChatFormatting.GRAY)
             );
             return InteractionResult.FAIL;
         }
@@ -82,10 +80,9 @@ public class AbilitySwordItem extends Item {
         activate(serverLevel, user);
         COOLDOWNS.put(cooldownKey, now + this.ability.cooldownTicks());
 
-        user.displayClientMessage(
+        user.sendSystemMessage(
                 Component.literal(abilityDisplayName() + " activated!")
-                        .withStyle(ChatFormatting.AQUA),
-                true
+                        .withStyle(ChatFormatting.AQUA)
         );
 
         return InteractionResult.SUCCESS;

@@ -1,75 +1,39 @@
-CHILL ZONE ZENITH - FIX 9 / ABILITY PROTOTYPE
+CHILL ZONE ZENITH - FIX 10
+ABILITY COMPILE FIX
 
-THIS IS THE SAME MOD, UPDATED FOR THE NEXT TEST.
+This is the SAME Fix 9 ability-prototype build with the compile error corrected.
 
-NEW IN FIX 9
-============
-1. /zenith give now supports a quantity:
-      /zenith give @s ender_essence 32
-      /zenith give Kaedan ender_blade 1
-      /zenith give @p ravager_horn 16
+ERROR FIXED:
+    cannot find symbol
+    method displayClientMessage(MutableComponent, boolean)
+    location: variable user of type Player
 
-2. Commands remain administrator/gamemaster-only.
+Minecraft 26.2 changed this player message API.
+The mod now uses Player.sendSystemMessage(Component) for:
+- branch deactivated warnings
+- ability cooldown messages
+- ability activated confirmations
 
-3. All sword names now have custom colours.
-4. Every sword has tooltip lore describing its right-click ability and cooldown.
-5. Right-click ability PROTOTYPES are now wired in for every sword.
-6. Ability use respects branch activation.
-7. Boss Blade destruction handling:
-   - If a legitimately crafted Boss Blade becomes a dropped ItemEntity and is
-     actually destroyed (fire/explosion/etc.), that branch's one-per-world lock
-     resets automatically.
-   - Putting it in an inventory, Ender Chest, chest, shulker, or logging out does
-     NOT trigger the destruction callback and does NOT unlock another craft.
-   - Admin /zenith resetboss <branch> remains available as the testing/manual
-     recovery command, especially for CREATIVE inventory deletion, which does not
-     create a destroyed ItemEntity for the server to observe.
+NOTHING ELSE WAS REMOVED.
 
-ABILITY PROTOTYPE NOTES
-=======================
-These are gameplay prototypes, not the final particle/audio polish.
+THIS BUILD STILL INCLUDES:
+- working crafting system from Fix 8
+- branch activation gating
+- one-per-world Boss Blade crafting
+- automatic unlock when dropped Boss Blade item entities are destroyed
+- targeted /zenith give <targets> <item> <count>
+- coloured sword names
+- sword lore/tooltips
+- prototype abilities for every sword
+- Zenith Storm prototype
+- admin-only commands
 
-Ender Blade          - Ender Step
-Shulker Blade        - Shulker Shot / levitation
-Ender Dragon Blade   - Dragon Warp + blast
+UPLOAD:
+1. Extract All.
+2. Upload everything INSIDE to the same GitHub repository.
+3. Replace the older files.
+4. Commit changes.
+5. Go to Actions.
+6. Test the newest build.
 
-Sword of Undying     - Last Stand
-Mansion Blade        - Vex Call prototype combat buff
-Ravager Blade        - Ravager Charge
-
-Prismarine Blade     - Guardian Ray
-Sponge Blade         - Tidal Burst
-Elder Tide Blade     - Elder Curse
-Elder Guardian Blade - Wrath of the Monument
-
-Echo Blade           - Echo Sense
-Warden's Wrath       - Sonic Boom
-Warden Blade         - Sonic Devastation
-
-Blade of Fire        - Inferno
-Golden Desire        - Golden Rush
-Ghost Blade          - Ghast Fireball prototype ray (no terrain damage)
-Wither Blade         - Withering Barrage
-
-Zenith Blade         - Zenith Storm prototype: five forward spectral damage lanes
-
-IMPORTANT UNIQUE-BLADE TEST
-===========================
-1. Legitimately craft a boss blade.
-2. Confirm a second cannot be crafted.
-3. Throw the boss blade on the ground.
-4. Destroy the dropped item with fire/lava/explosion.
-5. Reopen the correct table and test that the boss recipe is available again.
-
-For creative-menu deletion, use:
-    /zenith resetboss ender
-    /zenith resetboss ravager
-    /zenith resetboss guardian
-    /zenith resetboss warden
-    /zenith resetboss wither
-    /zenith resetboss zenith
-
-BUILD
-=====
-Extract -> upload everything inside -> replace old files -> Commit -> Actions.
-If red, send the FIRST red compiler/error block.
+If red again, send the FIRST red error block.
