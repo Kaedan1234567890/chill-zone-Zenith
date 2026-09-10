@@ -1,27 +1,39 @@
-CHILL ZONE ZENITH - FIX 3
+CHILL ZONE ZENITH - FIX 5: ADMIN TESTING GIVE COMMAND
 
-This version fixes the Java compile errors shown after Fix 2.
+This includes everything from Fix 4 plus an easy testing command.
 
-FIXED:
-- CommandSourceStack.hasPermission(int) was replaced with the Minecraft 26.2 permission API:
-  source.permissions().hasPermission(Permissions.COMMANDS_GAMEMASTER)
+ADMIN TEST COMMAND:
+    /zenith give <item>
 
-- Old SavedData CompoundTag save/load overrides were removed.
-- Progression persistence now uses Minecraft 26.2's Codec + SavedDataType API.
-- The six branch switches are stored as one small integer bitmask.
-- computeIfAbsent now receives the SavedDataType directly.
+The <item> part AUTOCOMPLETES every custom Zenith item/block currently registered.
 
-WHAT YOU DO:
-1. Download this ZIP.
-2. Extract All.
-3. Open the extracted folder.
-4. Upload EVERYTHING INSIDE it to the SAME GitHub repository.
-5. Replace the old files when GitHub asks.
-6. Commit changes.
-7. Click Actions.
-8. Open the newest "Build Chill Zone Zenith" run.
+Examples:
+    /zenith give ender_essence
+    /zenith give shulker_essence
+    /zenith give ender_blade
+    /zenith give ender_dragon_blade
+    /zenith give ravager_horn
+    /zenith give warden_heart
+    /zenith give zenith_blade
+    /zenith give ender_crafting_table
 
-GREEN CHECK = send me a screenshot or download the artifact.
-RED X = send me the FIRST error section again.
+You can therefore test the recipes without farming rare drops first.
 
-You do not need to edit Java yourself.
+Vanilla /give also still works:
+    /give @s chillzonezenith:ender_essence
+    /give @s chillzonezenith:ender_blade
+
+The /zenith give command is only an ADMIN TESTING shortcut.
+Normal players still need to earn/craft the items normally once drops and restricted
+branch crafting are wired in.
+
+UPLOAD:
+1. Extract this ZIP.
+2. Upload EVERYTHING INSIDE it to the same GitHub repository.
+3. Replace old files.
+4. Commit changes.
+5. Go to Actions.
+6. Test the newest build.
+
+If red: send the FIRST error block.
+If green: use the new JAR.

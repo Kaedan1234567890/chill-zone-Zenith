@@ -1,13 +1,22 @@
 package com.chillzone.zenith.command;
 
+import com.chillzone.zenith.ZenithMod;
 import com.chillzone.zenith.progression.ZenithCategory;
 import com.chillzone.zenith.progression.ZenithProgressionState;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.permissions.Permissions;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public final class ZenithCommands {
     private ZenithCommands() {}
@@ -56,8 +65,75 @@ public final class ZenithCommands {
 
                     .then(Commands.literal("deactivateall")
                         .executes(ctx -> setAll(ctx.getSource(), false)))
+
+                    // Admin testing helper. Gives any Chill Zone Zenith item/block by short ID.
+                    // Example: /zenith give ender_essence
+                    // Example: /zenith give ender_blade
+                    // Example: /zenith give ender_crafting_table
+                    .then(Commands.literal("give")
+                        .then(Commands.argument("item", StringArgumentType.word())
+                            .suggests((ctx, builder) -> {
+                                for (String id : zenithItemIds()) {
+                                    builder.suggest(id);
+                                }
+                                return builder.buildFuture();
+                            })
+                            .executes(ctx -> giveTestingItem(
+                                ctx.getSource(),
+                                StringArgumentType.getString(ctx, "item")
+                            ))))
             );
         });
+    }
+
+    private static List<String> zenithItemIds() {
+        List<String> ids = new ArrayList<>();
+
+        BuiltInRegistries.ITEM.keySet().forEach(id -> {
+            if (ZenithMod.MOD_ID.equals(id.getNamespace())) {
+                ids.add(id.getPath());
+            }
+        });
+
+        ids.sort(String::compareTo);
+        return ids;
+    }
+
+    private static int giveTestingItem(CommandSourceStack source, String shortId) {
+        Identifier id = Identifier.fromNamespaceAndPath(ZenithMod.MOD_ID, shortId);
+
+        if (!BuiltInRegistries.ITEM.containsKey(id)) {
+            source.sendFailure(Component.literal(
+                    "[Zenith] Unknown custom item: " + shortId
+            ));
+            return 0;
+        }
+
+        ServerPlayer player;
+        try {
+            player = source.getPlayerOrException();
+        } catch (Exception exception) {
+            source.sendFailure(Component.literal(
+                    "[Zenith] This testing command must be run by a player."
+            ));
+            return 0;
+        }
+
+        Item item = BuiltInRegistries.ITEM.getValue(id);
+        ItemStack stack = new ItemStack(item);
+
+        boolean inserted = player.getInventory().add(stack);
+
+        if (!inserted) {
+            player.drop(stack, false);
+        }
+
+        source.sendSuccess(
+                () -> Component.literal("[Zenith] Gave 1x " + shortId),
+                false
+        );
+
+        return 1;
     }
 
     private static int setCategory(

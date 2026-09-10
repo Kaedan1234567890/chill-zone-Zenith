@@ -1,6 +1,8 @@
 package com.chillzone.zenith;
 
+import com.chillzone.zenith.block.ZenithBlocks;
 import com.chillzone.zenith.command.ZenithCommands;
+import com.chillzone.zenith.item.ZenithItems;
 import net.fabricmc.api.ModInitializer;
 
 public final class ZenithMod implements ModInitializer {
@@ -8,12 +10,8 @@ public final class ZenithMod implements ModInitializer {
 
     @Override
     public void onInitialize() {
+        ZenithItems.initialize();
+        ZenithBlocks.initialize();
         ZenithCommands.register();
-
-        // NEXT PHASE:
-        // ZenithItems.register();
-        // ZenithBlocks.register();
-        // ZenithLootHooks.register();
-        // ZenithRecipes.register();
     }
 }

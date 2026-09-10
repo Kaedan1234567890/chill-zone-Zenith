@@ -1,0 +1,32 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "SHS",
+    "DCD",
+    "PWP"
+  ],
+  "key": {
+    "S": {
+      "item": "minecraft:sea_lantern"
+    },
+    "H": {
+      "item": "minecraft:heart_of_the_sea"
+    },
+    "D": {
+      "item": "minecraft:dark_prismarine"
+    },
+    "C": {
+      "item": "minecraft:crafting_table"
+    },
+    "P": {
+      "item": "minecraft:prismarine_bricks"
+    },
+    "W": {
+      "item": "minecraft:wet_sponge"
+    }
+  },
+  "result": {
+    "id": "chillzonezenith:guardian_crafting_table"
+  }
+}

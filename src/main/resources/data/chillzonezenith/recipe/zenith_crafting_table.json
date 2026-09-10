@@ -1,0 +1,32 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "ECR",
+    "CGC",
+    "WCT"
+  ],
+  "key": {
+    "E": {
+      "item": "chillzonezenith:ender_crafting_table"
+    },
+    "C": {
+      "item": "minecraft:crafting_table"
+    },
+    "R": {
+      "item": "chillzonezenith:ravager_crafting_table"
+    },
+    "G": {
+      "item": "chillzonezenith:guardian_crafting_table"
+    },
+    "W": {
+      "item": "chillzonezenith:warden_crafting_table"
+    },
+    "T": {
+      "item": "chillzonezenith:wither_crafting_table"
+    }
+  },
+  "result": {
+    "id": "chillzonezenith:zenith_crafting_table"
+  }
+}
