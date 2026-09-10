@@ -7,20 +7,13 @@
     "ECE"
   ],
   "key": {
-    "E": {
-      "item": "minecraft:echo_shard"
-    },
-    "C": {
-      "item": "minecraft:sculk_catalyst"
-    },
-    "S": {
-      "item": "minecraft:sculk_sensor"
-    },
-    "T": {
-      "item": "minecraft:crafting_table"
-    }
+    "E": "minecraft:echo_shard",
+    "C": "minecraft:sculk_catalyst",
+    "S": "minecraft:sculk_sensor",
+    "T": "minecraft:crafting_table"
   },
   "result": {
+    "count": 1,
     "id": "chillzonezenith:warden_crafting_table"
   }
 }

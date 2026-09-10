@@ -1,33 +1,60 @@
-CHILL ZONE ZENITH - FIX 6: CREATIVE TAB COMPILE FIX
+CHILL ZONE ZENITH - FIX 7 / PHASE 1 CRAFTING SYSTEM
 
-This fixes the exact error from your screenshot:
+THIS IS THE NEXT VERSION OF THE SAME MOD. NOTHING WAS STARTED OVER.
 
-    package net.fabricmc.fabric.api.itemgroup.v1 does not exist
-    cannot find symbol ItemGroupEvents
+WHAT THIS BUILD IS SUPPOSED TO FIX
+==================================
+1. All six themed crafting tables are craftable using the designed 3x3 recipes.
+2. Right-clicking a themed table opens a normal 3x3 Crafting Table GUI and it stays open.
+3. A themed table ONLY recognizes its own Zenith branch recipes.
+4. Vanilla recipes are suppressed inside the themed tables.
+5. The custom swords are NOT registered as normal vanilla Crafting Table recipes.
+6. If a branch is OFF, its themed table produces no custom sword result.
+7. Turning a branch OFF does NOT delete swords that already exist.
+8. One legitimate Boss Blade can be crafted per branch/world:
+      Ender Dragon Blade
+      Ravager Blade
+      Elder Guardian Blade
+      Warden Blade
+      Wither Blade
+      Zenith Blade
+9. The one-per-world flag is saved across restarts.
+10. Admin /zenith give can still be used for testing.
+11. /zenith give now targets players:
+      /zenith give @s ender_essence
+      /zenith give Kaedan ender_blade
+      /zenith give @p ravager_horn
+      /zenith give @a ender_crafting_table
+12. Admin test reset:
+      /zenith resetboss ender
+      /zenith resetboss ravager
+      /zenith resetboss guardian
+      /zenith resetboss warden
+      /zenith resetboss wither
+      /zenith resetboss zenith
 
-WHAT CHANGED
-- Removed the old ItemGroupEvents code that no longer exists in this Minecraft/Fabric API setup.
-- Custom items and custom crafting tables are STILL registered.
-- /zenith give <item> STILL works and is the intended testing method.
-- Vanilla /give STILL works.
-- Updated Fabric API to 0.160.0+26.2.
+FIRST TEST I WANT YOU TO DO
+===========================
+A) /zenith activate ender
+B) /zenith give @s ender_crafting_table
+C) Place the Ender table and right-click it.
+D) The GUI should remain open.
+E) /zenith give @s ender_essence
+F) Put the exact Ender Blade recipe into the ENDER TABLE.
+G) Confirm Ender Blade appears as the result.
+H) Put the same ingredients into a NORMAL crafting table.
+I) Confirm the custom Ender Blade does NOT appear.
+J) /zenith deactivate ender
+K) Re-open the Ender table. The same recipe should now produce NOTHING.
+L) Existing Ender Blades should remain in your inventory.
 
-IMPORTANT
-In this test build, the Zenith items may not be manually listed inside the vanilla
-Creative tabs. That does NOT stop the items from existing or working.
-Use the testing command instead:
+IMPORTANT TEST NOTE FOR UNIQUE BOSS BLADES
+==========================================
+The unique flag is marked after the legitimate boss result is taken from its custom table.
+For clean testing, do not keep an admin-given copy of that SAME boss blade in your inventory
+while testing its legitimate one-per-world craft. Admin /give itself does not intentionally
+set the unique craft flag.
 
-    /zenith give ender_essence
-    /zenith give ender_blade
-    /zenith give ender_crafting_table
-
-UPLOAD
-1. Download and Extract All.
-2. Upload EVERYTHING INSIDE this folder to the same GitHub repository.
-3. Replace the old files.
-4. Commit changes.
-5. Go to Actions.
-6. Open the newest Build Chill Zone Zenith run.
-
-GREEN = download the artifact and test the JAR.
-RED = send the FIRST red error section again.
+IF GITHUB IS RED
+================
+Send ChatGPT the FIRST red compiler/error block. Do not edit the Java yourself.

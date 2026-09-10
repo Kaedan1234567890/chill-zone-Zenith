@@ -7,26 +7,15 @@
     "PWP"
   ],
   "key": {
-    "S": {
-      "item": "minecraft:sea_lantern"
-    },
-    "H": {
-      "item": "minecraft:heart_of_the_sea"
-    },
-    "D": {
-      "item": "minecraft:dark_prismarine"
-    },
-    "C": {
-      "item": "minecraft:crafting_table"
-    },
-    "P": {
-      "item": "minecraft:prismarine_bricks"
-    },
-    "W": {
-      "item": "minecraft:wet_sponge"
-    }
+    "S": "minecraft:sea_lantern",
+    "H": "minecraft:heart_of_the_sea",
+    "D": "minecraft:dark_prismarine",
+    "C": "minecraft:crafting_table",
+    "P": "minecraft:prismarine_bricks",
+    "W": "minecraft:wet_sponge"
   },
   "result": {
+    "count": 1,
     "id": "chillzonezenith:guardian_crafting_table"
   }
 }

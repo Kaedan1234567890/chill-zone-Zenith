@@ -7,6 +7,7 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
+import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
@@ -16,6 +17,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public final class ZenithCommands {
@@ -33,32 +35,10 @@ public final class ZenithCommands {
                         .executes(ctx -> showStatus(ctx.getSource())))
 
                     .then(Commands.literal("activate")
-                        .then(Commands.argument("category", StringArgumentType.word())
-                            .suggests((ctx, builder) -> {
-                                for (ZenithCategory category : ZenithCategory.values()) {
-                                    builder.suggest(category.id());
-                                }
-                                return builder.buildFuture();
-                            })
-                            .executes(ctx -> setCategory(
-                                ctx.getSource(),
-                                StringArgumentType.getString(ctx, "category"),
-                                true
-                            ))))
+                        .then(categoryArgument(true)))
 
                     .then(Commands.literal("deactivate")
-                        .then(Commands.argument("category", StringArgumentType.word())
-                            .suggests((ctx, builder) -> {
-                                for (ZenithCategory category : ZenithCategory.values()) {
-                                    builder.suggest(category.id());
-                                }
-                                return builder.buildFuture();
-                            })
-                            .executes(ctx -> setCategory(
-                                ctx.getSource(),
-                                StringArgumentType.getString(ctx, "category"),
-                                false
-                            ))))
+                        .then(categoryArgument(false)))
 
                     .then(Commands.literal("activateall")
                         .executes(ctx -> setAll(ctx.getSource(), true)))
@@ -66,24 +46,57 @@ public final class ZenithCommands {
                     .then(Commands.literal("deactivateall")
                         .executes(ctx -> setAll(ctx.getSource(), false)))
 
-                    // Admin testing helper. Gives any Chill Zone Zenith item/block by short ID.
-                    // Example: /zenith give ender_essence
-                    // Example: /zenith give ender_blade
-                    // Example: /zenith give ender_crafting_table
+                    /*
+                     * Admin testing command.
+                     * Examples:
+                     * /zenith give @s ender_essence
+                     * /zenith give Kaedan ender_blade
+                     * /zenith give @a ender_crafting_table
+                     */
                     .then(Commands.literal("give")
-                        .then(Commands.argument("item", StringArgumentType.word())
+                        .then(Commands.argument("targets", EntityArgument.players())
+                            .then(Commands.argument("item", StringArgumentType.word())
+                                .suggests((ctx, builder) -> {
+                                    for (String id : zenithItemIds()) builder.suggest(id);
+                                    return builder.buildFuture();
+                                })
+                                .executes(ctx -> giveTestingItem(
+                                    ctx.getSource(),
+                                    EntityArgument.getPlayers(ctx, "targets"),
+                                    StringArgumentType.getString(ctx, "item")
+                                )))))
+
+                    // Admin-only testing escape hatch for the one-per-world flag.
+                    .then(Commands.literal("resetboss")
+                        .then(Commands.argument("category", StringArgumentType.word())
                             .suggests((ctx, builder) -> {
-                                for (String id : zenithItemIds()) {
-                                    builder.suggest(id);
+                                for (ZenithCategory category : ZenithCategory.values()) {
+                                    builder.suggest(category.id());
                                 }
                                 return builder.buildFuture();
                             })
-                            .executes(ctx -> giveTestingItem(
+                            .executes(ctx -> resetBoss(
                                 ctx.getSource(),
-                                StringArgumentType.getString(ctx, "item")
+                                StringArgumentType.getString(ctx, "category")
                             ))))
             );
         });
+    }
+
+    private static com.mojang.brigadier.builder.RequiredArgumentBuilder<CommandSourceStack, String>
+    categoryArgument(boolean enabled) {
+        return Commands.argument("category", StringArgumentType.word())
+                .suggests((ctx, builder) -> {
+                    for (ZenithCategory category : ZenithCategory.values()) {
+                        builder.suggest(category.id());
+                    }
+                    return builder.buildFuture();
+                })
+                .executes(ctx -> setCategory(
+                        ctx.getSource(),
+                        StringArgumentType.getString(ctx, "category"),
+                        enabled
+                ));
     }
 
     private static List<String> zenithItemIds() {
@@ -99,41 +112,40 @@ public final class ZenithCommands {
         return ids;
     }
 
-    private static int giveTestingItem(CommandSourceStack source, String shortId) {
+    private static int giveTestingItem(
+            CommandSourceStack source,
+            Collection<ServerPlayer> targets,
+            String shortId
+    ) {
         Identifier id = Identifier.fromNamespaceAndPath(ZenithMod.MOD_ID, shortId);
 
         if (!BuiltInRegistries.ITEM.containsKey(id)) {
-            source.sendFailure(Component.literal(
-                    "[Zenith] Unknown custom item: " + shortId
-            ));
-            return 0;
-        }
-
-        ServerPlayer player;
-        try {
-            player = source.getPlayerOrException();
-        } catch (Exception exception) {
-            source.sendFailure(Component.literal(
-                    "[Zenith] This testing command must be run by a player."
-            ));
+            source.sendFailure(Component.literal("[Zenith] Unknown custom item: " + shortId));
             return 0;
         }
 
         Item item = BuiltInRegistries.ITEM.getValue(id);
-        ItemStack stack = new ItemStack(item);
+        int count = 0;
 
-        boolean inserted = player.getInventory().add(stack);
+        for (ServerPlayer player : targets) {
+            ItemStack stack = new ItemStack(item);
 
-        if (!inserted) {
-            player.drop(stack, false);
+            if (!player.getInventory().add(stack)) {
+                player.drop(stack, false);
+            }
+
+            count++;
         }
 
+        int finalCount = count;
         source.sendSuccess(
-                () -> Component.literal("[Zenith] Gave 1x " + shortId),
-                false
+                () -> Component.literal(
+                        "[Zenith] Gave 1x " + shortId + " to " + finalCount + " player(s)."
+                ),
+                true
         );
 
-        return 1;
+        return count;
     }
 
     private static int setCategory(
@@ -144,32 +156,22 @@ public final class ZenithCommands {
         ZenithCategory category = ZenithCategory.fromId(rawCategory).orElse(null);
 
         if (category == null) {
-            source.sendFailure(Component.literal(
-                    "Unknown Zenith category: " + rawCategory
-            ));
+            source.sendFailure(Component.literal("Unknown Zenith category: " + rawCategory));
             return 0;
         }
 
-        ZenithProgressionState state =
-                ZenithProgressionState.get(source.getServer());
-
-        state.setEnabled(category, enabled);
+        ZenithProgressionState.get(source.getServer()).setEnabled(category, enabled);
 
         String action = enabled ? "ACTIVATED" : "DEACTIVATED";
         source.sendSuccess(
-                () -> Component.literal(
-                        "[Zenith] " + category.id() + " " + action
-                ),
+                () -> Component.literal("[Zenith] " + category.id() + " " + action),
                 true
         );
 
         return 1;
     }
 
-    private static int setAll(
-            CommandSourceStack source,
-            boolean enabled
-    ) {
+    private static int setAll(CommandSourceStack source, boolean enabled) {
         ZenithProgressionState.get(source.getServer()).setAll(enabled);
 
         String action = enabled ? "ACTIVATED" : "DEACTIVATED";
@@ -181,9 +183,27 @@ public final class ZenithCommands {
         return 1;
     }
 
+    private static int resetBoss(CommandSourceStack source, String rawCategory) {
+        ZenithCategory category = ZenithCategory.fromId(rawCategory).orElse(null);
+
+        if (category == null) {
+            source.sendFailure(Component.literal("Unknown Zenith category: " + rawCategory));
+            return 0;
+        }
+
+        ZenithProgressionState.get(source.getServer()).resetBossCrafted(category);
+        source.sendSuccess(
+                () -> Component.literal(
+                        "[Zenith] Reset unique crafting flag for " + category.id()
+                ),
+                true
+        );
+
+        return 1;
+    }
+
     private static int showStatus(CommandSourceStack source) {
-        ZenithProgressionState state =
-                ZenithProgressionState.get(source.getServer());
+        ZenithProgressionState state = ZenithProgressionState.get(source.getServer());
 
         source.sendSuccess(
                 () -> Component.literal("----- Zenith Progression -----"),
@@ -191,12 +211,12 @@ public final class ZenithCommands {
         );
 
         for (ZenithCategory category : ZenithCategory.values()) {
-            boolean enabled = state.isEnabled(category);
-            String status = enabled ? "ON" : "OFF";
+            String onOff = state.isEnabled(category) ? "ON" : "OFF";
+            String unique = state.isBossCrafted(category) ? "BOSS CRAFTED" : "boss available";
 
             source.sendSuccess(
                     () -> Component.literal(
-                            category.id() + ": " + status
+                            category.id() + ": " + onOff + " | " + unique
                     ),
                     false
             );

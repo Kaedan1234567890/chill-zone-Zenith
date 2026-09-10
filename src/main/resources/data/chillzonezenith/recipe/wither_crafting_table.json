@@ -7,26 +7,15 @@
     "ADA"
   ],
   "key": {
-    "B": {
-      "item": "minecraft:blaze_rod"
-    },
-    "S": {
-      "item": "minecraft:wither_skeleton_skull"
-    },
-    "N": {
-      "item": "minecraft:nether_bricks"
-    },
-    "C": {
-      "item": "minecraft:crafting_table"
-    },
-    "A": {
-      "item": "minecraft:soul_sand"
-    },
-    "D": {
-      "item": "minecraft:ancient_debris"
-    }
+    "B": "minecraft:blaze_rod",
+    "S": "minecraft:wither_skeleton_skull",
+    "N": "minecraft:nether_bricks",
+    "C": "minecraft:crafting_table",
+    "A": "minecraft:soul_sand",
+    "D": "minecraft:ancient_debris"
   },
   "result": {
+    "count": 1,
     "id": "chillzonezenith:wither_crafting_table"
   }
 }

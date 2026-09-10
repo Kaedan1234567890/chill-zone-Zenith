@@ -11,25 +11,18 @@ import net.minecraft.world.level.saveddata.SavedDataType;
 import java.util.EnumMap;
 import java.util.Map;
 
-/**
- * Persistent server/world-wide activation state for all Zenith branches.
- *
- * Minecraft 26.2 uses Codec + SavedDataType rather than the old
- * CompoundTag save/load override API.
- */
 public final class ZenithProgressionState extends SavedData {
+    /*
+     * One packed integer keeps this backwards-compatible with the Fix 3/6 save:
+     * bits 0-5  = branch activation
+     * bits 8-13 = unique boss blade has been legitimately crafted
+     */
     private static final Codec<ZenithProgressionState> CODEC =
-            Codec.INT.xmap(
-                    ZenithProgressionState::new,
-                    ZenithProgressionState::toMask
-            );
+            Codec.INT.xmap(ZenithProgressionState::new, ZenithProgressionState::toPackedInt);
 
     private static final SavedDataType<ZenithProgressionState> TYPE =
             new SavedDataType<>(
-                    Identifier.fromNamespaceAndPath(
-                            ZenithMod.MOD_ID,
-                            "progression_state"
-                    ),
+                    Identifier.fromNamespaceAndPath(ZenithMod.MOD_ID, "progression_state"),
                     ZenithProgressionState::new,
                     CODEC,
                     null
@@ -38,32 +31,36 @@ public final class ZenithProgressionState extends SavedData {
     private final EnumMap<ZenithCategory, Boolean> enabled =
             new EnumMap<>(ZenithCategory.class);
 
+    private final EnumMap<ZenithCategory, Boolean> bossCrafted =
+            new EnumMap<>(ZenithCategory.class);
+
     public ZenithProgressionState() {
         for (ZenithCategory category : ZenithCategory.values()) {
             enabled.put(category, false);
+            bossCrafted.put(category, false);
         }
     }
 
-    private ZenithProgressionState(int mask) {
+    private ZenithProgressionState(int packed) {
         this();
+        ZenithCategory[] values = ZenithCategory.values();
 
-        ZenithCategory[] categories = ZenithCategory.values();
-        for (int i = 0; i < categories.length; i++) {
-            enabled.put(categories[i], (mask & (1 << i)) != 0);
+        for (int i = 0; i < values.length; i++) {
+            enabled.put(values[i], (packed & (1 << i)) != 0);
+            bossCrafted.put(values[i], (packed & (1 << (i + 8))) != 0);
         }
     }
 
-    private int toMask() {
-        int mask = 0;
-        ZenithCategory[] categories = ZenithCategory.values();
+    private int toPackedInt() {
+        int packed = 0;
+        ZenithCategory[] values = ZenithCategory.values();
 
-        for (int i = 0; i < categories.length; i++) {
-            if (isEnabled(categories[i])) {
-                mask |= (1 << i);
-            }
+        for (int i = 0; i < values.length; i++) {
+            if (isEnabled(values[i])) packed |= (1 << i);
+            if (isBossCrafted(values[i])) packed |= (1 << (i + 8));
         }
 
-        return mask;
+        return packed;
     }
 
     public boolean isEnabled(ZenithCategory category) {
@@ -82,6 +79,20 @@ public final class ZenithProgressionState extends SavedData {
         setDirty();
     }
 
+    public boolean isBossCrafted(ZenithCategory category) {
+        return bossCrafted.getOrDefault(category, false);
+    }
+
+    public void markBossCrafted(ZenithCategory category) {
+        bossCrafted.put(category, true);
+        setDirty();
+    }
+
+    public void resetBossCrafted(ZenithCategory category) {
+        bossCrafted.put(category, false);
+        setDirty();
+    }
+
     public Map<ZenithCategory, Boolean> snapshot() {
         return Map.copyOf(enabled);
     }
@@ -90,8 +101,6 @@ public final class ZenithProgressionState extends SavedData {
         ServerLevel level = server.getLevel(ServerLevel.OVERWORLD);
 
         if (level == null) {
-            // This should not happen during normal command execution, but keeps
-            // the helper safe during unusual server startup/shutdown states.
             return new ZenithProgressionState();
         }
 

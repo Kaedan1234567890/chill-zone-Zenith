@@ -7,17 +7,12 @@
     "AEA"
   ],
   "key": {
-    "A": {
-      "item": "minecraft:end_rod"
-    },
-    "E": {
-      "item": "minecraft:ender_eye"
-    },
-    "C": {
-      "item": "minecraft:crafting_table"
-    }
+    "A": "minecraft:end_rod",
+    "E": "minecraft:ender_eye",
+    "C": "minecraft:crafting_table"
   },
   "result": {
+    "count": 1,
     "id": "chillzonezenith:ender_crafting_table"
   }
 }
