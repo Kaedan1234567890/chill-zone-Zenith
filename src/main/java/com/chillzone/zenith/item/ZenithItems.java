@@ -1,13 +1,11 @@
 package com.chillzone.zenith.item;
 
 import com.chillzone.zenith.ZenithMod;
-import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ToolMaterial;
 
@@ -90,41 +88,10 @@ public final class ZenithItems {
     public static final Item ZENITH_BLADE = sword("zenith_blade");
 
     public static void initialize() {
-        ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.INGREDIENTS).register(entries -> {
-            entries.accept(ENDER_ESSENCE);
-            entries.accept(SHULKER_ESSENCE);
-            entries.accept(RAVAGER_HORN);
-            entries.accept(RAVAGER_HEART);
-            entries.accept(MANSION_KEY);
-            entries.accept(GUARDIAN_SCALE);
-            entries.accept(ELDER_GUARDIAN_CORE);
-            entries.accept(WARDEN_HEART);
-            entries.accept(BLAZING_CORE);
-            entries.accept(WITHERED_FRAGMENT);
-            entries.accept(PIGLIN_SIGIL);
-            entries.accept(BRUTES_EMBLEM);
-            entries.accept(GHAST_ESSENCE);
-        });
-
-        ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.COMBAT).register(entries -> {
-            entries.accept(ENDER_BLADE);
-            entries.accept(SHULKER_BLADE);
-            entries.accept(ENDER_DRAGON_BLADE);
-            entries.accept(SWORD_OF_UNDYING);
-            entries.accept(MANSION_BLADE);
-            entries.accept(RAVAGER_BLADE);
-            entries.accept(PRISMARINE_BLADE);
-            entries.accept(SPONGE_BLADE);
-            entries.accept(ELDER_TIDE_BLADE);
-            entries.accept(ELDER_GUARDIAN_BLADE);
-            entries.accept(ECHO_BLADE);
-            entries.accept(WARDENS_WRATH);
-            entries.accept(WARDEN_BLADE);
-            entries.accept(BLADE_OF_FIRE);
-            entries.accept(GOLDEN_DESIRE);
-            entries.accept(GHOST_BLADE);
-            entries.accept(WITHER_BLADE);
-            entries.accept(ZENITH_BLADE);
-        });
+        // Items are registered by the static fields above.
+        // Creative-tab insertion is intentionally omitted in this build because
+        // Fabric's item-group API changed in Minecraft 26.2.
+        //
+        // Use /zenith give <item> or vanilla /give for testing.
     }
 }

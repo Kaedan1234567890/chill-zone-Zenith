@@ -1,39 +1,33 @@
-CHILL ZONE ZENITH - FIX 5: ADMIN TESTING GIVE COMMAND
+CHILL ZONE ZENITH - FIX 6: CREATIVE TAB COMPILE FIX
 
-This includes everything from Fix 4 plus an easy testing command.
+This fixes the exact error from your screenshot:
 
-ADMIN TEST COMMAND:
-    /zenith give <item>
+    package net.fabricmc.fabric.api.itemgroup.v1 does not exist
+    cannot find symbol ItemGroupEvents
 
-The <item> part AUTOCOMPLETES every custom Zenith item/block currently registered.
+WHAT CHANGED
+- Removed the old ItemGroupEvents code that no longer exists in this Minecraft/Fabric API setup.
+- Custom items and custom crafting tables are STILL registered.
+- /zenith give <item> STILL works and is the intended testing method.
+- Vanilla /give STILL works.
+- Updated Fabric API to 0.160.0+26.2.
 
-Examples:
+IMPORTANT
+In this test build, the Zenith items may not be manually listed inside the vanilla
+Creative tabs. That does NOT stop the items from existing or working.
+Use the testing command instead:
+
     /zenith give ender_essence
-    /zenith give shulker_essence
     /zenith give ender_blade
-    /zenith give ender_dragon_blade
-    /zenith give ravager_horn
-    /zenith give warden_heart
-    /zenith give zenith_blade
     /zenith give ender_crafting_table
 
-You can therefore test the recipes without farming rare drops first.
-
-Vanilla /give also still works:
-    /give @s chillzonezenith:ender_essence
-    /give @s chillzonezenith:ender_blade
-
-The /zenith give command is only an ADMIN TESTING shortcut.
-Normal players still need to earn/craft the items normally once drops and restricted
-branch crafting are wired in.
-
-UPLOAD:
-1. Extract this ZIP.
-2. Upload EVERYTHING INSIDE it to the same GitHub repository.
-3. Replace old files.
+UPLOAD
+1. Download and Extract All.
+2. Upload EVERYTHING INSIDE this folder to the same GitHub repository.
+3. Replace the old files.
 4. Commit changes.
 5. Go to Actions.
-6. Test the newest build.
+6. Open the newest Build Chill Zone Zenith run.
 
-If red: send the FIRST error block.
-If green: use the new JAR.
+GREEN = download the artifact and test the JAR.
+RED = send the FIRST red error section again.

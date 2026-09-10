@@ -1,14 +1,12 @@
 package com.chillzone.zenith.block;
 
 import com.chillzone.zenith.ZenithMod;
-import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
@@ -50,13 +48,9 @@ public final class ZenithBlocks {
     public static final Block ZENITH_CRAFTING_TABLE = registerTable("zenith_crafting_table");
 
     public static void initialize() {
-        ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.FUNCTIONAL_BLOCKS).register(entries -> {
-            entries.accept(ENDER_CRAFTING_TABLE.asItem());
-            entries.accept(RAVAGER_CRAFTING_TABLE.asItem());
-            entries.accept(GUARDIAN_CRAFTING_TABLE.asItem());
-            entries.accept(WARDEN_CRAFTING_TABLE.asItem());
-            entries.accept(WITHER_CRAFTING_TABLE.asItem());
-            entries.accept(ZENITH_CRAFTING_TABLE.asItem());
-        });
+        // Blocks and BlockItems are registered by the static fields above.
+        // Creative-tab insertion is intentionally omitted in this build.
+        //
+        // Use /zenith give ender_crafting_table (etc.) for testing.
     }
 }
