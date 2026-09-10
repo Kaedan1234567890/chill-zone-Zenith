@@ -4,6 +4,7 @@ import com.chillzone.zenith.ZenithMod;
 import com.chillzone.zenith.progression.ZenithCategory;
 import com.chillzone.zenith.progression.ZenithProgressionState;
 import com.mojang.brigadier.arguments.StringArgumentType;
+import com.mojang.brigadier.arguments.IntegerArgumentType;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -57,16 +58,24 @@ public final class ZenithCommands {
                         .then(Commands.argument("targets", EntityArgument.players())
                             .then(Commands.argument("item", StringArgumentType.word())
                                 .suggests((ctx, builder) -> {
-                                    for (String id : zenithItemIds()) builder.suggest(id);
+                                    for (String id : zenithItemIds()) {
+                                        builder.suggest(id);
+                                    }
                                     return builder.buildFuture();
                                 })
                                 .executes(ctx -> giveTestingItem(
                                     ctx.getSource(),
                                     EntityArgument.getPlayers(ctx, "targets"),
-                                    StringArgumentType.getString(ctx, "item")
-                                )))))
-
-                    // Admin-only testing escape hatch for the one-per-world flag.
+                                    StringArgumentType.getString(ctx, "item"),
+                                    1
+                                ))
+                                .then(Commands.argument("count", IntegerArgumentType.integer(1, 64))
+                                    .executes(ctx -> giveTestingItem(
+                                        ctx.getSource(),
+                                        EntityArgument.getPlayers(ctx, "targets"),
+                                        StringArgumentType.getString(ctx, "item"),
+                                        IntegerArgumentType.getInteger(ctx, "count")
+                                    ))))))
                     .then(Commands.literal("resetboss")
                         .then(Commands.argument("category", StringArgumentType.word())
                             .suggests((ctx, builder) -> {
@@ -115,7 +124,8 @@ public final class ZenithCommands {
     private static int giveTestingItem(
             CommandSourceStack source,
             Collection<ServerPlayer> targets,
-            String shortId
+            String shortId,
+            int amount
     ) {
         Identifier id = Identifier.fromNamespaceAndPath(ZenithMod.MOD_ID, shortId);
 
@@ -128,7 +138,7 @@ public final class ZenithCommands {
         int count = 0;
 
         for (ServerPlayer player : targets) {
-            ItemStack stack = new ItemStack(item);
+            ItemStack stack = new ItemStack(item, amount);
 
             if (!player.getInventory().add(stack)) {
                 player.drop(stack, false);
@@ -140,7 +150,7 @@ public final class ZenithCommands {
         int finalCount = count;
         source.sendSuccess(
                 () -> Component.literal(
-                        "[Zenith] Gave 1x " + shortId + " to " + finalCount + " player(s)."
+                        "[Zenith] Gave " + amount + "x " + shortId + " to " + finalCount + " player(s)."
                 ),
                 true
         );

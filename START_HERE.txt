@@ -1,39 +1,67 @@
-CHILL ZONE ZENITH - FIX 8
-CRAFTING SYSTEM COMPILE FIX
+CHILL ZONE ZENITH - FIX 9 / ABILITY PROTOTYPE
 
-This is the SAME Fix 7 crafting-system build with the compile error corrected.
+THIS IS THE SAME MOD, UPDATED FOR THE NEXT TEST.
 
-ERROR FIXED:
-    cannot find symbol
-    method getServer()
-    location: variable player of type Player
+NEW IN FIX 9
+============
+1. /zenith give now supports a quantity:
+      /zenith give @s ender_essence 32
+      /zenith give Kaedan ender_blade 1
+      /zenith give @p ravager_horn 16
 
-Minecraft 26.2 no longer exposes getServer() on the base Player class.
-The unique Boss Blade tracking now gets the MinecraftServer from the
-ServerLevel supplied by the custom crafting table's ContainerLevelAccess.
+2. Commands remain administrator/gamemaster-only.
 
-NOTHING ELSE FROM THE GAME PLAN WAS REMOVED.
+3. All sword names now have custom colours.
+4. Every sword has tooltip lore describing its right-click ability and cooldown.
+5. Right-click ability PROTOTYPES are now wired in for every sword.
+6. Ability use respects branch activation.
+7. Boss Blade destruction handling:
+   - If a legitimately crafted Boss Blade becomes a dropped ItemEntity and is
+     actually destroyed (fire/explosion/etc.), that branch's one-per-world lock
+     resets automatically.
+   - Putting it in an inventory, Ender Chest, chest, shulker, or logging out does
+     NOT trigger the destruction callback and does NOT unlock another craft.
+   - Admin /zenith resetboss <branch> remains available as the testing/manual
+     recovery command, especially for CREATIVE inventory deletion, which does not
+     create a destroyed ItemEntity for the server to observe.
 
-THIS BUILD STILL INCLUDES:
-- Six custom crafting tables.
-- Custom tables open a 3x3 crafting GUI.
-- Each table is restricted to its own branch recipes.
-- Normal crafting tables do not craft Zenith swords.
-- Branch activation controls whether branch recipes work.
-- Existing crafted swords remain after deactivation.
-- One legitimate craft per world for:
-    Ender Dragon Blade
-    Ravager Blade
-    Elder Guardian Blade
-    Warden Blade
-    Wither Blade
-    Zenith Blade
-- Persistent one-per-world flags.
-- Targetable admin testing command:
-    /zenith give @s ender_essence
-    /zenith give Kaedan ender_blade
-    /zenith give @p ravager_horn
-- Admin unique-craft reset:
+ABILITY PROTOTYPE NOTES
+=======================
+These are gameplay prototypes, not the final particle/audio polish.
+
+Ender Blade          - Ender Step
+Shulker Blade        - Shulker Shot / levitation
+Ender Dragon Blade   - Dragon Warp + blast
+
+Sword of Undying     - Last Stand
+Mansion Blade        - Vex Call prototype combat buff
+Ravager Blade        - Ravager Charge
+
+Prismarine Blade     - Guardian Ray
+Sponge Blade         - Tidal Burst
+Elder Tide Blade     - Elder Curse
+Elder Guardian Blade - Wrath of the Monument
+
+Echo Blade           - Echo Sense
+Warden's Wrath       - Sonic Boom
+Warden Blade         - Sonic Devastation
+
+Blade of Fire        - Inferno
+Golden Desire        - Golden Rush
+Ghost Blade          - Ghast Fireball prototype ray (no terrain damage)
+Wither Blade         - Withering Barrage
+
+Zenith Blade         - Zenith Storm prototype: five forward spectral damage lanes
+
+IMPORTANT UNIQUE-BLADE TEST
+===========================
+1. Legitimately craft a boss blade.
+2. Confirm a second cannot be crafted.
+3. Throw the boss blade on the ground.
+4. Destroy the dropped item with fire/lava/explosion.
+5. Reopen the correct table and test that the boss recipe is available again.
+
+For creative-menu deletion, use:
     /zenith resetboss ender
     /zenith resetboss ravager
     /zenith resetboss guardian
@@ -41,12 +69,7 @@ THIS BUILD STILL INCLUDES:
     /zenith resetboss wither
     /zenith resetboss zenith
 
-UPLOAD:
-1. Extract All.
-2. Upload everything INSIDE this folder to the same GitHub repository.
-3. Replace the older files.
-4. Commit changes.
-5. Open Actions.
-6. Run/test the newest build.
-
-If it is red again, send the FIRST red error block.
+BUILD
+=====
+Extract -> upload everything inside -> replace old files -> Commit -> Actions.
+If red, send the FIRST red compiler/error block.
