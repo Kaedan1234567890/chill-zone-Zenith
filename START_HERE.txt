@@ -1,44 +1,47 @@
-CHILL ZONE ZENITH - FIX 14
-FULL ABILITY SYNTAX CLEANUP
+CHILL ZONE ZENITH - FIX 15
+MINECRAFT 26.2 API COMPILE FIX
 
-This is the SAME MOD moving forward from Fix 13.
+This is the SAME MOD moving forward from Fix 14.
 
-WHAT WAS WRONG
+THE ERRORS IN YOUR SCREENSHOT
+=============================
+1) ZenithCommands.java:
+       level.getAllEntities().stream()
+   Minecraft 26.2 returns an Iterable here, not a Java Stream.
+
+2) ZenithAbilityScheduler.java:
+       player.serverLevel()
+   That method is not available in this 26.2 mapping/API.
+
+WHAT I CHANGED
 ==============
-Fix 13 removed the leftover lines from the OLD Warden Blade code, but there was
-a SECOND leftover block from the OLD Zenith Storm implementation farther down
-in AbilitySwordItem.java.
+- Replaced the dropped-item detector Stream code with a normal foreach loop.
+- Replaced player.serverLevel() with player.level().
+- Where a ServerLevel is required, the player's level is cast to ServerLevel.
+- I searched the project for the exact broken calls and removed all remaining
+  uses of serverLevel() and getAllEntities().stream().
 
-That stale block caused:
-    case, default, or '}' expected
-at about line 234.
-
-WHAT I FIXED
-============
-- Removed the old duplicate Zenith particle block.
-- Re-checked the ENTIRE main ability switch instead of only the reported line.
-- Confirmed every ability case appears exactly once.
-- Confirmed the previous stale Warden line is gone.
-- Confirmed the stale Zenith block is gone.
-- Confirmed the Java file's braces are balanced.
-
-NOTHING ELSE WAS REMOVED
-========================
-Fix 14 still includes:
+NOTHING FROM THE MOD WAS REMOVED.
+Fix 15 still contains:
+- custom crafting tables and branch crafting
+- activation/deactivation
+- one-per-world Boss Blade crafting locks
 - /zenith detect <category>
 - /zenith resetboss <category>
 - /zenith give <targets> <item> <count>
-- custom sword names, colours, lore and ability descriptions
 - dedicated Zenith Creative tab
-- visual vanilla-style cooldown overlay
-- Warden Blade reveal -> aim delay -> beam prototype
+- coloured names and lore/descriptions
+- vanilla-style visual cooldowns
+- Warden delayed targeting/beam prototype
 - 15-lane one-shot Zenith Storm
-- crafting and activation gating
-- one-per-world Boss Blade locks
-- automatic dropped-item destruction unlock handling
+- the rest of the sword ability prototypes
 
-BUILD
-=====
-Extract -> upload everything inside -> replace old files -> Commit -> Actions.
+UPLOAD
+======
+1. Download and Extract All.
+2. Upload EVERYTHING INSIDE the extracted folder to the SAME GitHub repository.
+3. Replace the old files.
+4. Commit changes.
+5. Open Actions.
 
-If GitHub is red again, send the FIRST red compiler/error block.
+If it turns red again, send the FIRST red error block.

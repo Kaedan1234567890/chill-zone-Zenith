@@ -231,10 +231,10 @@ public final class ZenithCommands {
         }
 
         for (var level : source.getServer().getAllLevels()) {
-            for (ItemEntity dropped : level.getAllEntities().stream()
-                    .filter(entity -> entity instanceof ItemEntity)
-                    .map(entity -> (ItemEntity) entity)
-                    .toList()) {
+            for (var entity : level.getAllEntities()) {
+                if (!(entity instanceof ItemEntity dropped)) {
+                    continue;
+                }
 
                 if (stackIs(dropped.getItem(), bossId)) {
                     int found = dropped.getItem().getCount();

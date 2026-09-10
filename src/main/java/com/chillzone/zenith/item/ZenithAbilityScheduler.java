@@ -26,7 +26,7 @@ public final class ZenithAbilityScheduler {
     }
 
     public static void scheduleWardenBeam(ServerPlayer player, int delayTicks) {
-        long now = player.serverLevel().getGameTime();
+        long now = player.level().getGameTime();
         WARDEN_BEAMS.add(new PendingWardenBeam(player.getUUID(), now + delayTicks));
     }
 
@@ -44,7 +44,7 @@ public final class ZenithAbilityScheduler {
                 continue;
             }
 
-            ServerLevel level = player.serverLevel();
+            ServerLevel level = (ServerLevel) player.level();
 
             if (level.getGameTime() < pending.fireTick()) {
                 continue;
