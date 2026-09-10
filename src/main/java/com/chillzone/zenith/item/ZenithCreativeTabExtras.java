@@ -7,7 +7,7 @@ public final class ZenithCreativeTabExtras {
     private ZenithCreativeTabExtras() {}
 
     public static void initialize() {
-        CreativeModeTabEvents.modifyEntries(ZenithItems.ZENITH_CREATIVE_TAB_KEY)
+        CreativeModeTabEvents.modifyEntries(ZenithItems.ZENITH_CREATIVE_TAB)
                 .register(output -> {
                     output.accept(ZenithBlocks.ENDER_CRAFTING_TABLE);
                     output.accept(ZenithBlocks.RAVAGER_CRAFTING_TABLE);
