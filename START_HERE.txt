@@ -1,34 +1,44 @@
-CHILL ZONE ZENITH - FIX 13 / SYNTAX FIX
+CHILL ZONE ZENITH - FIX 14
+FULL ABILITY SYNTAX CLEANUP
 
-This is the SAME Fix 12 build with the Java syntax error corrected.
+This is the SAME MOD moving forward from Fix 13.
 
-ERROR FIXED
-===========
-AbilitySwordItem.java line ~181:
+WHAT WAS WRONG
+==============
+Fix 13 removed the leftover lines from the OLD Warden Blade code, but there was
+a SECOND leftover block from the OLD Zenith Storm implementation farther down
+in AbilitySwordItem.java.
+
+That stale block caused:
     case, default, or '}' expected
-    sonicTrail(level, user, 16.0);
+at about line 234.
 
-Cause:
-Two leftover lines from the OLD Warden Blade ability were accidentally left
-underneath the NEW delayed Warden Blade block.
+WHAT I FIXED
+============
+- Removed the old duplicate Zenith particle block.
+- Re-checked the ENTIRE main ability switch instead of only the reported line.
+- Confirmed every ability case appears exactly once.
+- Confirmed the previous stale Warden line is gone.
+- Confirmed the stale Zenith block is gone.
+- Confirmed the Java file's braces are balanced.
 
-Those stale lines are now removed.
-
-NOTHING ELSE WAS REMOVED.
-Fix 13 still includes:
+NOTHING ELSE WAS REMOVED
+========================
+Fix 14 still includes:
 - /zenith detect <category>
 - /zenith resetboss <category>
-- targetable /zenith give <targets> <item> <count>
-- custom names, colours, lore, ability descriptions and cooldowns
+- /zenith give <targets> <item> <count>
+- custom sword names, colours, lore and ability descriptions
 - dedicated Zenith Creative tab
-- Warden Blade reveal -> 2.5 second aim window -> 15 block beam
-- 15-lane one-shot Zenith Storm
 - visual vanilla-style cooldown overlay
-- crafting tables and activation gating
+- Warden Blade reveal -> aim delay -> beam prototype
+- 15-lane one-shot Zenith Storm
+- crafting and activation gating
 - one-per-world Boss Blade locks
+- automatic dropped-item destruction unlock handling
 
 BUILD
 =====
 Extract -> upload everything inside -> replace old files -> Commit -> Actions.
 
-If GitHub is red again, send ChatGPT the FIRST red compiler/error block.
+If GitHub is red again, send the FIRST red compiler/error block.

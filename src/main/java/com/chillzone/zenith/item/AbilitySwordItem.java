@@ -231,10 +231,6 @@ public class AbilitySwordItem extends Item {
                         0.12
                 );
             }
-                level.sendParticles(ParticleTypes.END_ROD,
-                        user.getX(), user.getEyeY(), user.getZ(),
-                        70, 1.4, 1.0, 1.4, 0.1);
-            }
         }
     }
 
