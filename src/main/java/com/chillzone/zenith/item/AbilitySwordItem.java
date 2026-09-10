@@ -178,8 +178,6 @@ public class AbilitySwordItem extends Item {
                     ZenithAbilityScheduler.scheduleWardenBeam(serverPlayer, 50);
                 }
             }
-                sonicTrail(level, user, 16.0);
-            }
 
             case INFERNO -> {
                 for (LivingEntity target : nearby(level, user, 5.0)) {

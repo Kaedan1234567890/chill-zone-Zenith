@@ -1,67 +1,34 @@
-CHILL ZONE ZENITH - FIX 12 / BOSS DETECT
+CHILL ZONE ZENITH - FIX 13 / SYNTAX FIX
 
-THIS IS THE SAME MOD, UPDATED FROM FIX 11.
+This is the SAME Fix 12 build with the Java syntax error corrected.
 
-NEW ADMIN COMMAND
-=================
-/zenith detect <category>
+ERROR FIXED
+===========
+AbilitySwordItem.java line ~181:
+    case, default, or '}' expected
+    sonicTrail(level, user, 16.0);
 
-The category auto-fills:
-ender
-ravager
-guardian
-warden
-wither
-zenith
+Cause:
+Two leftover lines from the OLD Warden Blade ability were accidentally left
+underneath the NEW delayed Warden Blade block.
 
-Examples:
-/zenith detect ender
-/zenith detect warden
-/zenith detect zenith
+Those stale lines are now removed.
 
-WHAT IT CHECKS
-==============
-- ONLINE player inventories
-- ONLINE player Ender Chests
-- loaded dropped Boss Blade item entities
-
-It also tells you whether that Boss Blade craft lock is currently:
-LOCKED
-or
-AVAILABLE
-
-IMPORTANT
-=========
-This is a MANUAL inspection tool, not an automatic reset.
-
-If the command says the blade is not found, that does NOT prove the blade was
-destroyed. It may still be in:
-- an offline player's inventory
-- an offline player's Ender Chest
-- a chest or barrel
-- a shulker box
-- an unloaded chunk
-
-That is why /zenith resetboss <category> remains the final owner/admin decision.
-
-DESCRIPTIONS
-============
-Yes - the custom sword names, colours, descriptions, ability name, and cooldown
-tooltip from Fix 11 are still included.
-
-EVERYTHING FROM FIX 11 IS KEPT
-==============================
-- dedicated Zenith creative section
-- visual vanilla-style cooldowns
-- Warden Blade targeting/beam prototype
-- 15-lane one-shot Zenith Storm prototype
-- crafting/activation system
+NOTHING ELSE WAS REMOVED.
+Fix 13 still includes:
+- /zenith detect <category>
+- /zenith resetboss <category>
+- targetable /zenith give <targets> <item> <count>
+- custom names, colours, lore, ability descriptions and cooldowns
+- dedicated Zenith Creative tab
+- Warden Blade reveal -> 2.5 second aim window -> 15 block beam
+- 15-lane one-shot Zenith Storm
+- visual vanilla-style cooldown overlay
+- crafting tables and activation gating
 - one-per-world Boss Blade locks
-- targeted /zenith give <targets> <item> <count>
-- admin-only commands
 
 BUILD
 =====
-Extract -> upload everything inside -> replace files -> Commit -> Actions.
+Extract -> upload everything inside -> replace old files -> Commit -> Actions.
 
-If GitHub is red, send the FIRST red compiler/error block.
+If GitHub is red again, send ChatGPT the FIRST red compiler/error block.
