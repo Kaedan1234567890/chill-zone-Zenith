@@ -1,0 +1,14 @@
+CHILL ZONE ZENITH - FIX 22
+
+Fixes Minecraft Java 26.2 compile errors in ZenithMobDrops.java.
+
+Problem:
+Minecraft 26.2 in this mapping/API does not expose mob constants such as
+EntityType.ENDERMAN, EntityType.SHULKER, EntityType.RAVAGER, etc.
+
+Fix:
+The death listener now reads the killed entity's registered Minecraft ID
+(enderman, shulker, ravager, etc.) from BuiltInRegistries.ENTITY_TYPE and
+matches that ID. Drop rates and branch activation gating are unchanged.
+
+Everything from Fix 21 / Fix 20 remains included.
