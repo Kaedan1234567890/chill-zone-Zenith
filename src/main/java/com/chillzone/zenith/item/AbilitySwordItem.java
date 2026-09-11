@@ -66,12 +66,26 @@ public class AbilitySwordItem extends Item {
 
         boolean testMode = ZenithTestMode.isTesting(user.getUUID());
 
-        if (!testMode && user.getCooldowns().isOnCooldown(heldStack)) {
-            return InteractionResult.FAIL;
+        if (!testMode) {
+            int remainingTicks =
+                    ZenithCooldownTracker.remainingTicks(user.getUUID(), this.ability);
+
+            if (remainingTicks > 0) {
+                // Reapply the vanilla overlay after reconnect and keep the
+                // server-side tracker as the actual anti-bypass authority.
+                user.getCooldowns().addCooldown(heldStack, remainingTicks);
+                return InteractionResult.FAIL;
+            }
+
+            if (user.getCooldowns().isOnCooldown(heldStack)) {
+                return InteractionResult.FAIL;
+            }
         }
 
         activate(serverLevel, user);
+
         if (!testMode) {
+            ZenithCooldownTracker.start(user.getUUID(), this.ability);
             user.getCooldowns().addCooldown(heldStack, this.ability.cooldownTicks());
         }
 

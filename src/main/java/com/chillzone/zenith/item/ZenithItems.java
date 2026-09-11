@@ -58,17 +58,22 @@ public final class ZenithItems {
         Item.Properties properties = new Item.Properties()
                 .sword(ToolMaterial.NETHERITE, 1.0F, -2.4F)
                 .component(
-                        DataComponents.ITEM_NAME,
-                        Component.literal(displayName).withStyle(style -> style.withColor(color).withBold(true))
+                        DataComponents.CUSTOM_NAME,
+                        Component.literal(displayName).withStyle(
+                                style -> style
+                                        .withColor(color)
+                                        .withBold(true)
+                                        .withItalic(false)
+                        )
                 )
                 .component(
                         DataComponents.LORE,
-                        new ItemLore(List.of(
-                                Component.literal(description).withStyle(ChatFormatting.GRAY),
-                                Component.literal("Right Click • " + abilityDetails(ability))
-                                        .withStyle(color),
-                                Component.literal("Cooldown • " + formatCooldown(ability.cooldownSeconds()))
-                                        .withStyle(ChatFormatting.DARK_GRAY)
+                        new ItemLore(buildLore(
+                                description,
+                                color,
+                                ability,
+                                uniqueBoss,
+                                category
                         ))
                 );
 
@@ -77,6 +82,49 @@ public final class ZenithItems {
                 settings -> new AbilitySwordItem(settings, ability, category, uniqueBoss),
                 properties
         );
+    }
+
+
+    private static List<Component> buildLore(
+            String description,
+            ChatFormatting color,
+            ZenithAbility ability,
+            boolean uniqueBoss,
+            ZenithCategory category
+    ) {
+        java.util.ArrayList<Component> lore = new java.util.ArrayList<>();
+
+        if (uniqueBoss) {
+            String label = category == ZenithCategory.ZENITH
+                    ? "★★★ ULTIMATE BLADE ★★★"
+                    : "★★★ BOSS BLADE ★★★";
+
+            lore.add(
+                    Component.literal(label).withStyle(
+                            style -> style
+                                    .withColor(color)
+                                    .withBold(true)
+                                    .withItalic(false)
+                    )
+            );
+        }
+
+        lore.add(
+                Component.literal(description)
+                        .withStyle(style -> style.withColor(ChatFormatting.GRAY).withItalic(false))
+        );
+
+        lore.add(
+                Component.literal("Right Click • " + abilityDetails(ability))
+                        .withStyle(style -> style.withColor(color).withItalic(false))
+        );
+
+        lore.add(
+                Component.literal("Cooldown • " + formatCooldown(ability.cooldownSeconds()))
+                        .withStyle(style -> style.withColor(ChatFormatting.DARK_GRAY).withItalic(false))
+        );
+
+        return lore;
     }
 
     private static String abilityName(ZenithAbility ability) {
@@ -158,7 +206,7 @@ public final class ZenithItems {
             "A defensive escape blade that blinks you out of danger."
     );
     public static final Item ENDER_DRAGON_BLADE = sword(
-            "ender_dragon_blade", "✦ ENDER DRAGON BLADE ✦", ChatFormatting.DARK_PURPLE,
+            "ender_dragon_blade", "★ ENDER DRAGON BLADE ★", ChatFormatting.DARK_PURPLE,
             ZenithAbility.DRAGON_WARP, ZenithCategory.ENDER, true,
             "The completed End weapon, combining mobility with burst damage."
     );
@@ -175,7 +223,7 @@ public final class ZenithItems {
             "A short combat surge for chasing, escaping, or turning a fight."
     );
     public static final Item RAVAGER_BLADE = sword(
-            "ravager_blade", "✦ RAVAGER BLADE ✦", ChatFormatting.GOLD,
+            "ravager_blade", "★ RAVAGER BLADE ★", ChatFormatting.GOLD,
             ZenithAbility.RAVAGER_CHARGE, ZenithCategory.RAVAGER, true,
             "A heavy charge weapon that follows impact with a combat surge."
     );
@@ -197,7 +245,7 @@ public final class ZenithItems {
             "An underwater control blade that strips nearby enemies of air."
     );
     public static final Item ELDER_GUARDIAN_BLADE = sword(
-            "elder_guardian_blade", "✦ ELDER GUARDIAN BLADE ✦", ChatFormatting.AQUA,
+            "elder_guardian_blade", "★ ELDER GUARDIAN BLADE ★", ChatFormatting.AQUA,
             ZenithAbility.WRATH_OF_MONUMENT, ZenithCategory.GUARDIAN, true,
             "The monument's control weapon: knockback, Slowness, and Mining Fatigue."
     );
@@ -214,7 +262,7 @@ public final class ZenithItems {
             "A weakened sonic weapon designed to pressure, not instantly kill."
     );
     public static final Item WARDEN_BLADE = sword(
-            "warden_blade", "✦ WARDEN BLADE ✦", ChatFormatting.DARK_AQUA,
+            "warden_blade", "★ WARDEN BLADE ★", ChatFormatting.DARK_AQUA,
             ZenithAbility.SONIC_DEVASTATION, ZenithCategory.WARDEN, true,
             "The completed Sculk weapon: reveal first, then fire a heavy sonic beam."
     );
@@ -236,14 +284,14 @@ public final class ZenithItems {
             "A compact fire shot that burns targets without destroying terrain."
     );
     public static final Item WITHER_BLADE = sword(
-            "wither_blade", "✦ WITHER BLADE ✦", ChatFormatting.DARK_RED,
+            "wither_blade", "★ WITHER BLADE ★", ChatFormatting.DARK_RED,
             ZenithAbility.WITHERING_BARRAGE, ZenithCategory.WITHER, true,
             "The completed Nether weapon: one heavy Wither-style projectile strike."
     );
 
     // Final
     public static final Item ZENITH_BLADE = sword(
-            "zenith_blade", "✦ ZENITH BLADE ✦", ChatFormatting.LIGHT_PURPLE,
+            "zenith_blade", "★★★ ZENITH BLADE ★★★", ChatFormatting.LIGHT_PURPLE,
             ZenithAbility.ZENITH_STORM, ZenithCategory.ZENITH, true,
             "The five Boss Blades united into the server's ultimate weapon."
     );

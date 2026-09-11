@@ -1,0 +1,19 @@
+CHILL ZONE ZENITH - FIX 27
+STAR NAME FORMAT
+
+Built on Fix 26.
+
+Requested name formatting:
+- ★ ENDER DRAGON BLADE ★
+- ★ RAVAGER BLADE ★
+- ★ ELDER GUARDIAN BLADE ★
+- ★ WARDEN BLADE ★
+- ★ WITHER BLADE ★
+- ★★★ ZENITH BLADE ★★★
+
+All existing Fix 26 changes remain:
+- bold branch-coloured custom names
+- boss/ultimate lore marker
+- reconnect cooldown protection
+- /zenith test, /zenith untest, player targeting and all
+- existing abilities, sounds, drops, locks, activation, detect/reset

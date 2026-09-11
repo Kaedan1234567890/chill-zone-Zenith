@@ -39,10 +39,26 @@ public final class ZenithCommands {
                         .executes(ctx -> showStatus(ctx.getSource())))
 
                     .then(Commands.literal("test")
-                        .executes(ctx -> setTestMode(ctx.getSource(), true)))
+                        .executes(ctx -> setTestModeSelf(ctx.getSource(), true))
+                        .then(Commands.literal("all")
+                            .executes(ctx -> setTestModeAll(ctx.getSource(), true)))
+                        .then(Commands.argument("targets", EntityArgument.players())
+                            .executes(ctx -> setTestModeTargets(
+                                    ctx.getSource(),
+                                    EntityArgument.getPlayers(ctx, "targets"),
+                                    true
+                            ))))
 
                     .then(Commands.literal("untest")
-                        .executes(ctx -> setTestMode(ctx.getSource(), false)))
+                        .executes(ctx -> setTestModeSelf(ctx.getSource(), false))
+                        .then(Commands.literal("all")
+                            .executes(ctx -> setTestModeAll(ctx.getSource(), false)))
+                        .then(Commands.argument("targets", EntityArgument.players())
+                            .executes(ctx -> setTestModeTargets(
+                                    ctx.getSource(),
+                                    EntityArgument.getPlayers(ctx, "targets"),
+                                    false
+                            ))))
 
                     .then(Commands.literal("activate")
                         .then(categoryArgument(true)))
@@ -375,26 +391,84 @@ public final class ZenithCommands {
     }
 
 
-    private static int setTestMode(CommandSourceStack source, boolean enabled) {
+
+    private static int setTestModeSelf(
+            CommandSourceStack source,
+            boolean enabled
+    ) {
         ServerPlayer player;
+
         try {
             player = source.getPlayerOrException();
         } catch (Exception exception) {
-            source.sendFailure(Component.literal("[Zenith] This command must be run by a player."));
+            source.sendFailure(
+                    Component.literal(
+                            "[Zenith] Console must use /zenith test <player>, "
+                                    + "/zenith test all, /zenith untest <player>, "
+                                    + "or /zenith untest all."
+                    )
+            );
             return 0;
         }
 
-        if (enabled) {
-            ZenithTestMode.enable(player.getUUID());
-        } else {
-            ZenithTestMode.disable(player.getUUID());
+        return setTestModeTargets(
+                source,
+                java.util.List.of(player),
+                enabled
+        );
+    }
+
+    private static int setTestModeAll(
+            CommandSourceStack source,
+            boolean enabled
+    ) {
+        return setTestModeTargets(
+                source,
+                source.getServer().getPlayerList().getPlayers(),
+                enabled
+        );
+    }
+
+    private static int setTestModeTargets(
+            CommandSourceStack source,
+            Collection<ServerPlayer> targets,
+            boolean enabled
+    ) {
+        int changed = 0;
+
+        for (ServerPlayer player : targets) {
+            if (enabled) {
+                ZenithTestMode.enable(player.getUUID());
+            } else {
+                ZenithTestMode.disable(player.getUUID());
+            }
+
+            player.sendSystemMessage(
+                    Component.literal(
+                            "[Zenith] Test mode "
+                                    + (enabled
+                                    ? "ENABLED - Zenith weapon cooldowns are ignored."
+                                    : "DISABLED - normal Zenith cooldowns apply.")
+                    )
+            );
+
+            changed++;
         }
 
+        int finalChanged = changed;
+
         source.sendSuccess(
-                () -> Component.literal("[Zenith] Test mode " + (enabled ? "ON - Zenith cooldowns are ignored." : "OFF - normal cooldowns restored.")),
-                false
+                () -> Component.literal(
+                        "[Zenith] Test mode "
+                                + (enabled ? "enabled" : "disabled")
+                                + " for "
+                                + finalChanged
+                                + " player(s)."
+                ),
+                true
         );
-        return 1;
+
+        return changed;
     }
 
     private static int showStatus(CommandSourceStack source) {

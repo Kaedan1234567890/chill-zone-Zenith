@@ -1,0 +1,53 @@
+CHILL ZONE ZENITH - FIX 26
+NAME DISPLAY + REJOIN COOLDOWN + ADMIN TEST CONTROL
+
+Built on Fix 25.
+
+NAME / TOOLTIP FIX
+==================
+- Custom sword names now use DataComponents.CUSTOM_NAME.
+- Names are explicitly:
+  * branch-coloured
+  * BOLD
+  * non-italic
+- The unreliable symbols beside the Boss Blade names were removed.
+- Boss swords now get their own bold branch-coloured line:
+  ★★★ BOSS BLADE ★★★
+- Zenith gets:
+  ★★★ ULTIMATE BLADE ★★★
+- Existing useful description, Right Click line and Cooldown line remain.
+
+COOLDOWN REJOIN BUG
+===================
+Vanilla player item cooldown state can disappear when the player disconnects.
+
+Fix 26 adds a server-side cooldown authority keyed by:
+player UUID + Zenith ability + expiry time.
+
+Disconnecting/rejoining no longer removes the actual cooldown.
+If the player tries the weapon after rejoining, the vanilla visual cooldown
+overlay is re-applied with the remaining time.
+
+NOTE: This tracker persists through player disconnect/reconnect while the server
+process remains running. A full server restart clears these temporary cooldowns.
+
+ADMIN TEST CONTROL
+==================
+All commands still require gamemaster/operator permission.
+
+Self:
+- /zenith test
+- /zenith untest
+
+Specific online player(s):
+- /zenith test <player>
+- /zenith untest <player>
+- selectors also work, e.g. @a, @p
+
+Everyone currently online:
+- /zenith test all
+- /zenith untest all
+
+Everything else from Fix 25 remains included:
+mob drops, ability rework, sounds, activation, unique Boss Blade locks,
+detect/reset commands, Creative Zenith tab and Zenith sound sequence.
