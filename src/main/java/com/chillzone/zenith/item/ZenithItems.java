@@ -65,9 +65,9 @@ public final class ZenithItems {
                         DataComponents.LORE,
                         new ItemLore(List.of(
                                 Component.literal(description).withStyle(ChatFormatting.GRAY),
-                                Component.literal("Right Click: " + abilityDetails(ability))
-                                        .withStyle(ChatFormatting.AQUA),
-                                Component.literal("Cooldown: " + formatCooldown(ability.cooldownSeconds()))
+                                Component.literal("Right Click • " + abilityDetails(ability))
+                                        .withStyle(color),
+                                Component.literal("Cooldown • " + formatCooldown(ability.cooldownSeconds()))
                                         .withStyle(ChatFormatting.DARK_GRAY)
                         ))
                 );
@@ -110,24 +110,24 @@ public final class ZenithItems {
 
     private static String abilityDetails(ZenithAbility ability) {
         return switch (ability) {
-            case ENDER_STEP -> "Ender Step - blink 4 blocks forward.";
-            case SHULKER_SHOT -> "Shulker Escape - blink 5 blocks back + 2 sideways.";
-            case DRAGON_WARP -> "Dragon Warp - moving: 12-block damaging leap; still: breath burst + escape.";
-            case LAST_STAND -> "Last Stand - Absorption VIII for 8 seconds.";
-            case VEX_CALL -> "Mansion Rush - Speed III + Strength III for 8 seconds.";
-            case RAVAGER_CHARGE -> "Ravager Charge - ram forward, heavy hit, then Speed III + Strength III for 5 seconds.";
-            case GUARDIAN_RAY -> "Guardian Ray - marks your target with Mining Fatigue for 10 seconds.";
-            case TIDAL_BURST -> "Tidal Burst - wave pushes nearby enemies away without direct damage.";
-            case ELDER_CURSE -> "Drowning Curse - nearby enemies in water immediately lose their air.";
-            case WRATH_OF_MONUMENT -> "Monument Wrath - 8-block knockback + Mining Fatigue and Slowness.";
-            case ECHO_SENSE -> "Echo Sense - reveal living targets within 18 blocks.";
-            case SONIC_BOOM -> "Weak Sonic Boom - focused sonic hit; roughly four hits to defeat an unarmoured player.";
-            case SONIC_DEVASTATION -> "Sonic Devastation - reveal targets, then fire a powerful delayed sonic beam.";
-            case INFERNO -> "Inferno - ignite nearby enemies; damage comes from fire.";
-            case GOLDEN_RUSH -> "Golden Rush - gain Speed II + Haste II for 12 seconds.";
-            case GHAST_FIREBALL -> "Ghost Fireball - focused mini fireball hit + brief burning; no terrain destruction.";
-            case WITHERING_BARRAGE -> "Wither Shot - one focused Wither-skull style strike, about half base health unarmoured.";
-            case ZENITH_STORM -> "Zenith Storm - 15 simultaneous lethal lanes; designed to trigger Totems.";
+            case ENDER_STEP -> "Blink 4 blocks forward.";
+            case SHULKER_SHOT -> "Blink 5 blocks backward and slightly sideways.";
+            case DRAGON_WARP -> "Moving: 12-block damaging leap. Standing: breath burst, then retreat.";
+            case LAST_STAND -> "Gain Absorption VIII for 8 seconds.";
+            case VEX_CALL -> "Gain Speed III + Strength III for 8 seconds.";
+            case RAVAGER_CHARGE -> "Ram forward, then gain Speed III + Strength III for 5 seconds.";
+            case GUARDIAN_RAY -> "Hit your aimed target with Mining Fatigue for 10 seconds.";
+            case TIDAL_BURST -> "Push nearby enemies away with a non-damaging wave.";
+            case ELDER_CURSE -> "Nearby enemies in water immediately lose their air.";
+            case WRATH_OF_MONUMENT -> "Strong knockback + Mining Fatigue + Slowness.";
+            case ECHO_SENSE -> "Reveal living targets within 18 blocks.";
+            case SONIC_BOOM -> "Fire a weakened sonic hit; roughly four hits unarmoured.";
+            case SONIC_DEVASTATION -> "Reveal nearby targets, then fire a delayed heavy sonic beam.";
+            case INFERNO -> "Ignite nearby enemies; damage comes from burning.";
+            case GOLDEN_RUSH -> "Gain Speed II + Haste II for 12 seconds.";
+            case GHAST_FIREBALL -> "Fire a mini flame shot; no terrain destruction.";
+            case WITHERING_BARRAGE -> "Fire one heavy Wither-style strike; about half base health unarmoured.";
+            case ZENITH_STORM -> "Unleash 15 lethal spectral blade lanes at once; Totems still work.";
         };
     }
 
@@ -148,104 +148,104 @@ public final class ZenithItems {
 
     // Ender
     public static final Item ENDER_BLADE = sword(
-            "ender_blade", "Ender Blade", ChatFormatting.LIGHT_PURPLE,
+            "ender_blade", "Ender Blade", ChatFormatting.DARK_PURPLE,
             ZenithAbility.ENDER_STEP, ZenithCategory.ENDER, false,
-            "A blade infused with unstable End energy."
+            "A short-range escape blade built for quick repositioning."
     );
     public static final Item SHULKER_BLADE = sword(
             "shulker_blade", "Shulker Blade", ChatFormatting.DARK_PURPLE,
             ZenithAbility.SHULKER_SHOT, ZenithCategory.ENDER, false,
-            "Shulker energy bends gravity around its target."
+            "A defensive escape blade that blinks you out of danger."
     );
     public static final Item ENDER_DRAGON_BLADE = sword(
             "ender_dragon_blade", "Ender Dragon Blade", ChatFormatting.DARK_PURPLE,
             ZenithAbility.DRAGON_WARP, ZenithCategory.ENDER, true,
-            "Boss Blade - the completed weapon of the End."
+            "The completed End weapon, combining mobility with burst damage."
     );
 
     // Ravager
     public static final Item SWORD_OF_UNDYING = sword(
             "sword_of_undying", "Sword of Undying", ChatFormatting.GOLD,
             ZenithAbility.LAST_STAND, ZenithCategory.RAVAGER, false,
-            "Totem magic strengthens its wielder at the brink."
+            "Illager-Totem magic grants a powerful temporary shield."
     );
     public static final Item MANSION_BLADE = sword(
-            "mansion_blade", "Mansion Blade", ChatFormatting.DARK_GREEN,
+            "mansion_blade", "Mansion Blade", ChatFormatting.GOLD,
             ZenithAbility.VEX_CALL, ZenithCategory.RAVAGER, false,
-            "Illager magic answers the blade's command."
+            "A short combat surge for chasing, escaping, or turning a fight."
     );
     public static final Item RAVAGER_BLADE = sword(
-            "ravager_blade", "Ravager Blade", ChatFormatting.GREEN,
+            "ravager_blade", "Ravager Blade", ChatFormatting.GOLD,
             ZenithAbility.RAVAGER_CHARGE, ZenithCategory.RAVAGER, true,
-            "Boss Blade - built to hit like a charging Ravager."
+            "A heavy charge weapon that follows impact with a combat surge."
     );
 
     // Guardian
     public static final Item PRISMARINE_BLADE = sword(
             "prismarine_blade", "Prismarine Blade", ChatFormatting.AQUA,
             ZenithAbility.GUARDIAN_RAY, ZenithCategory.GUARDIAN, false,
-            "Channels a focused Guardian beam."
+            "A control blade that weakens a target's ability to mine."
     );
     public static final Item SPONGE_BLADE = sword(
-            "sponge_blade", "Sponge Blade", ChatFormatting.YELLOW,
+            "sponge_blade", "Sponge Blade", ChatFormatting.AQUA,
             ZenithAbility.TIDAL_BURST, ZenithCategory.GUARDIAN, false,
-            "Releases a violent burst of stored water."
+            "A defensive wave that creates space without direct damage."
     );
     public static final Item ELDER_TIDE_BLADE = sword(
-            "elder_tide_blade", "Elder Tide Blade", ChatFormatting.DARK_AQUA,
+            "elder_tide_blade", "Elder Tide Blade", ChatFormatting.AQUA,
             ZenithAbility.ELDER_CURSE, ZenithCategory.GUARDIAN, false,
-            "Carries the oppressive curse of an Elder Guardian."
+            "An underwater control blade that strips nearby enemies of air."
     );
     public static final Item ELDER_GUARDIAN_BLADE = sword(
             "elder_guardian_blade", "Elder Guardian Blade", ChatFormatting.AQUA,
             ZenithAbility.WRATH_OF_MONUMENT, ZenithCategory.GUARDIAN, true,
-            "Boss Blade - the monument's full power."
+            "The monument's control weapon: knockback, Slowness, and Mining Fatigue."
     );
 
     // Warden
     public static final Item ECHO_BLADE = sword(
-            "echo_blade", "Echo Blade", ChatFormatting.AQUA,
+            "echo_blade", "Echo Blade", ChatFormatting.DARK_AQUA,
             ZenithAbility.ECHO_SENSE, ZenithCategory.WARDEN, false,
-            "Reads nearby movement through Sculk resonance."
+            "A tracking blade that reveals nearby living targets through walls."
     );
     public static final Item WARDENS_WRATH = sword(
             "wardens_wrath", "Warden's Wrath", ChatFormatting.DARK_AQUA,
             ZenithAbility.SONIC_BOOM, ZenithCategory.WARDEN, false,
-            "Releases a focused sonic strike."
+            "A weakened sonic weapon designed to pressure, not instantly kill."
     );
     public static final Item WARDEN_BLADE = sword(
             "warden_blade", "Warden Blade", ChatFormatting.DARK_AQUA,
             ZenithAbility.SONIC_DEVASTATION, ZenithCategory.WARDEN, true,
-            "Boss Blade - a devastating wave of sonic force."
+            "The completed Sculk weapon: reveal first, then fire a heavy sonic beam."
     );
 
     // Wither
     public static final Item BLADE_OF_FIRE = sword(
-            "blade_of_fire", "Blade of Fire", ChatFormatting.RED,
+            "blade_of_fire", "Blade of Fire", ChatFormatting.DARK_RED,
             ZenithAbility.INFERNO, ZenithCategory.WITHER, false,
-            "Ignites everything caught in its inferno."
+            "A close-range fire tool that burns nearby enemies."
     );
     public static final Item GOLDEN_DESIRE = sword(
-            "golden_desire", "Golden Desire", ChatFormatting.GOLD,
+            "golden_desire", "Golden Desire", ChatFormatting.DARK_RED,
             ZenithAbility.GOLDEN_RUSH, ZenithCategory.WITHER, false,
-            "Piglin greed turned into raw speed and power."
+            "A movement and mining surge powered by Piglin gold."
     );
     public static final Item GHOST_BLADE = sword(
-            "ghost_blade", "Ghost Blade", ChatFormatting.WHITE,
+            "ghost_blade", "Ghost Blade", ChatFormatting.DARK_RED,
             ZenithAbility.GHAST_FIREBALL, ZenithCategory.WITHER, false,
-            "Ghast energy strikes without damaging terrain."
+            "A compact fire shot that burns targets without destroying terrain."
     );
     public static final Item WITHER_BLADE = sword(
-            "wither_blade", "Wither Blade", ChatFormatting.DARK_GRAY,
+            "wither_blade", "Wither Blade", ChatFormatting.DARK_RED,
             ZenithAbility.WITHERING_BARRAGE, ZenithCategory.WITHER, true,
-            "Boss Blade - unleashes a barrage of Withering force."
+            "The completed Nether weapon: one heavy Wither-style projectile strike."
     );
 
     // Final
     public static final Item ZENITH_BLADE = sword(
-            "zenith_blade", "✦ Zenith Blade ✦", ChatFormatting.LIGHT_PURPLE,
+            "zenith_blade", "✦ ZENITH BLADE ✦", ChatFormatting.LIGHT_PURPLE,
             ZenithAbility.ZENITH_STORM, ZenithCategory.ZENITH, true,
-            "The five paths united into one ultimate weapon."
+            "The five Boss Blades united into the server's ultimate weapon."
     );
 
 

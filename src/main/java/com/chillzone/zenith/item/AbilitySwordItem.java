@@ -244,6 +244,10 @@ public class AbilitySwordItem extends Item {
             }
 
             case ZENITH_STORM -> {
+                if (user instanceof ServerPlayer serverPlayer) {
+                    ZenithAbilityScheduler.scheduleZenithSoundtrack(serverPlayer);
+                }
+
                 // Fifteen simultaneous spectral lanes:
                 // 7 left + centre + 7 right.
                 for (int lane = -7; lane <= 7; lane++) {

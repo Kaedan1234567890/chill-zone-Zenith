@@ -1,0 +1,19 @@
+CHILL ZONE ZENITH - FIX 24
+POLISH + ZENITH SOUND SEQUENCE
+
+Built on Fix 23.
+
+- Consistent branch-coloured sword names.
+- Cleaner hover descriptions.
+- Right-click line states the exact effect.
+- Cooldown remains visible.
+- Zenith renamed visually to ✦ ZENITH BLADE ✦.
+- Zenith now plays a short layered vanilla-sound sequence:
+  converging spectral-blade sounds -> rising pressure -> heavy impact.
+- No copyrighted soundtrack/audio file is included.
+- Existing drops, abilities, commands, locks, cooldowns, and sounds remain.
+
+BEDROCK:
+Gameplay remains server-side. Geyser can bridge that behaviour.
+Final custom item visuals/sounds on Bedrock still need a Bedrock resource pack
+and Geyser custom-item mappings when we do the final texture/resource-pack pass.
