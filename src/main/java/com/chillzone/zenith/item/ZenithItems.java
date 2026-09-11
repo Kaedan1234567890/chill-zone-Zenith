@@ -59,7 +59,7 @@ public final class ZenithItems {
                 .sword(ToolMaterial.NETHERITE, 1.0F, -2.4F)
                 .component(
                         DataComponents.ITEM_NAME,
-                        Component.literal(displayName).withStyle(color)
+                        Component.literal(displayName).withStyle(style -> style.withColor(color).withBold(true))
                 )
                 .component(
                         DataComponents.LORE,
@@ -158,7 +158,7 @@ public final class ZenithItems {
             "A defensive escape blade that blinks you out of danger."
     );
     public static final Item ENDER_DRAGON_BLADE = sword(
-            "ender_dragon_blade", "Ender Dragon Blade", ChatFormatting.DARK_PURPLE,
+            "ender_dragon_blade", "✦ ENDER DRAGON BLADE ✦", ChatFormatting.DARK_PURPLE,
             ZenithAbility.DRAGON_WARP, ZenithCategory.ENDER, true,
             "The completed End weapon, combining mobility with burst damage."
     );
@@ -175,7 +175,7 @@ public final class ZenithItems {
             "A short combat surge for chasing, escaping, or turning a fight."
     );
     public static final Item RAVAGER_BLADE = sword(
-            "ravager_blade", "Ravager Blade", ChatFormatting.GOLD,
+            "ravager_blade", "✦ RAVAGER BLADE ✦", ChatFormatting.GOLD,
             ZenithAbility.RAVAGER_CHARGE, ZenithCategory.RAVAGER, true,
             "A heavy charge weapon that follows impact with a combat surge."
     );
@@ -197,7 +197,7 @@ public final class ZenithItems {
             "An underwater control blade that strips nearby enemies of air."
     );
     public static final Item ELDER_GUARDIAN_BLADE = sword(
-            "elder_guardian_blade", "Elder Guardian Blade", ChatFormatting.AQUA,
+            "elder_guardian_blade", "✦ ELDER GUARDIAN BLADE ✦", ChatFormatting.AQUA,
             ZenithAbility.WRATH_OF_MONUMENT, ZenithCategory.GUARDIAN, true,
             "The monument's control weapon: knockback, Slowness, and Mining Fatigue."
     );
@@ -214,7 +214,7 @@ public final class ZenithItems {
             "A weakened sonic weapon designed to pressure, not instantly kill."
     );
     public static final Item WARDEN_BLADE = sword(
-            "warden_blade", "Warden Blade", ChatFormatting.DARK_AQUA,
+            "warden_blade", "✦ WARDEN BLADE ✦", ChatFormatting.DARK_AQUA,
             ZenithAbility.SONIC_DEVASTATION, ZenithCategory.WARDEN, true,
             "The completed Sculk weapon: reveal first, then fire a heavy sonic beam."
     );
@@ -236,7 +236,7 @@ public final class ZenithItems {
             "A compact fire shot that burns targets without destroying terrain."
     );
     public static final Item WITHER_BLADE = sword(
-            "wither_blade", "Wither Blade", ChatFormatting.DARK_RED,
+            "wither_blade", "✦ WITHER BLADE ✦", ChatFormatting.DARK_RED,
             ZenithAbility.WITHERING_BARRAGE, ZenithCategory.WITHER, true,
             "The completed Nether weapon: one heavy Wither-style projectile strike."
     );
