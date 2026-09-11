@@ -179,7 +179,7 @@ public class AbilitySwordItem extends Item {
                 level.sendParticles(ParticleTypes.SCULK_SOUL,
                         user.getX(), user.getY() + 1.0, user.getZ(),
                         35, 2.0, 1.0, 2.0, 0.02);
-                play(level, user, SoundEvents.SCULK_SENSOR_CLICKING, 1.0F, 1.0F);
+                play(level, user, SoundEvents.WARDEN_HEARTBEAT, 1.0F, 1.0F);
             }
             case SONIC_BOOM -> {
                 LivingEntity target = targetInFront(level, user, 24.0);
