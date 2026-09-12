@@ -1,8 +1,0 @@
-CHILL ZONE ZENITH - FIX 25
-- All custom sword item names are now BOLD and use their branch colour.
-- Ender = purple, Ravager = gold/orange, Guardian = aqua, Warden = dark aqua, Wither = dark red.
-- Five branch Boss Blades now use ✦ BOSS BLADE NAME ✦ formatting.
-- Zenith keeps ✦ ZENITH BLADE ✦.
-- Useful description, Right Click effect and Cooldown remain.
-- No extra redundant ability-title lore was added.
-- Everything from Fix 24 remains included.

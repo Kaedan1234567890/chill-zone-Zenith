@@ -179,20 +179,6 @@ public final class ZenithItems {
         };
     }
 
-    // Materials
-    public static final Item ENDER_ESSENCE = material("ender_essence");
-    public static final Item SHULKER_ESSENCE = material("shulker_essence");
-    public static final Item RAVAGER_HORN = material("ravager_horn");
-    public static final Item RAVAGER_HEART = material("ravager_heart");
-    public static final Item MANSION_KEY = material("mansion_key");
-    public static final Item GUARDIAN_SCALE = material("guardian_scale");
-    public static final Item ELDER_GUARDIAN_CORE = material("elder_guardian_core");
-    public static final Item WARDEN_HEART = material("warden_heart");
-    public static final Item BLAZING_CORE = material("blazing_core");
-    public static final Item WITHERED_FRAGMENT = material("withered_fragment");
-    public static final Item PIGLIN_SIGIL = material("piglin_sigil");
-    public static final Item BRUTES_EMBLEM = material("brutes_emblem");
-    public static final Item GHAST_ESSENCE = material("ghast_essence");
 
     // Ender
     public static final Item ENDER_BLADE = sword(
@@ -310,19 +296,6 @@ public final class ZenithItems {
                     .displayItems((parameters, output) -> {
                     
     // Materials
-                        output.accept(ENDER_ESSENCE);
-                        output.accept(SHULKER_ESSENCE);
-                        output.accept(RAVAGER_HORN);
-                        output.accept(RAVAGER_HEART);
-                        output.accept(MANSION_KEY);
-                        output.accept(GUARDIAN_SCALE);
-                        output.accept(ELDER_GUARDIAN_CORE);
-                        output.accept(WARDEN_HEART);
-                        output.accept(BLAZING_CORE);
-                        output.accept(WITHERED_FRAGMENT);
-                        output.accept(PIGLIN_SIGIL);
-                        output.accept(BRUTES_EMBLEM);
-                        output.accept(GHAST_ESSENCE);
 
                         // Ender
                         output.accept(ENDER_BLADE);
