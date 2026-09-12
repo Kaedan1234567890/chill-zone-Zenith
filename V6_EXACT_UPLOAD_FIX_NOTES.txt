@@ -1,0 +1,27 @@
+ZENITH v6 - EXACT UPLOADED SOURCE / VANILLA MODEL FIX
+
+This version was made directly from the exact ZIP uploaded by the user.
+
+Fixes:
+- Removed the custom ITEM_MODEL component from every Zenith sword.
+- Removed the custom ITEM_MODEL component from Zenith crafting-table items.
+- Zenith crafting-table blocks now present to clients as a normal vanilla Crafting Table.
+- Intermediate swords present as Diamond Swords.
+- Golden Desire now also presents as a Diamond Sword.
+- Boss Blades present as Netherite Swords.
+- Zenith Blade presents as a Netherite Sword.
+- Stopped forcing the Polymer-generated resource pack because this build uses no custom visual models.
+
+Kept:
+- Custom names and coloured names
+- Lore
+- Abilities
+- Commands
+- Cooldowns
+- Recipes
+- Progression
+- Unique Boss Blade rules
+- Normal sword enchantment behavior
+
+Purpose:
+Prevent the giant black/magenta missing-model blocks on unmodded clients.

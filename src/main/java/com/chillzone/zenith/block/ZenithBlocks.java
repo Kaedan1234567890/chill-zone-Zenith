@@ -22,8 +22,6 @@ public final class ZenithBlocks {
         Identifier id = Identifier.fromNamespaceAndPath(ZenithMod.MOD_ID, name);
         ResourceKey<Block> blockKey = ResourceKey.create(Registries.BLOCK, id);
         ResourceKey<Item> itemKey = ResourceKey.create(Registries.ITEM, id);
-
-        // Pure vanilla client representation: no custom resource pack required.
         BlockState clientState = Blocks.CRAFTING_TABLE.defaultBlockState();
 
         Block block = new ZenithCraftingTableBlock(
