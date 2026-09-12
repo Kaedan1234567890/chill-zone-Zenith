@@ -2,6 +2,8 @@ package com.chillzone.zenith.item;
 
 import com.chillzone.zenith.progression.ZenithCategory;
 import com.chillzone.zenith.progression.ZenithProgressionState;
+import eu.pb4.polymer.core.api.item.PolymerItem;
+import net.fabricmc.fabric.api.networking.v1.context.PacketContext;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
@@ -25,22 +27,30 @@ import net.minecraft.sounds.SoundSource;
 import java.util.List;
 import java.util.Set;
 
-public class AbilitySwordItem extends Item {
+public class AbilitySwordItem extends Item implements PolymerItem {
 
     private final ZenithAbility ability;
     private final ZenithCategory category;
     private final boolean uniqueBoss;
+    private final Item polymerBaseItem;
 
     public AbilitySwordItem(
             Properties properties,
             ZenithAbility ability,
             ZenithCategory category,
-            boolean uniqueBoss
+            boolean uniqueBoss,
+            Item polymerBaseItem
     ) {
         super(properties);
         this.ability = ability;
         this.category = category;
         this.uniqueBoss = uniqueBoss;
+        this.polymerBaseItem = polymerBaseItem;
+    }
+
+    @Override
+    public Item getPolymerItem(ItemStack itemStack, PacketContext context) {
+        return this.polymerBaseItem;
     }
 
     @Override
@@ -130,8 +140,9 @@ public class AbilitySwordItem extends Item {
             }
 
             case LAST_STAND -> {
-                // Absorption VIII for 8 seconds: strong protection, no direct damage.
-                user.addEffect(new MobEffectInstance(MobEffects.ABSORPTION, 160, 7));
+                // Exactly 8 absorption hearts for 8 seconds.
+                // Absorption IV = 16 absorption health points = 8 hearts.
+                user.addEffect(new MobEffectInstance(MobEffects.ABSORPTION, 160, 3));
                 play(level, user, SoundEvents.TOTEM_USE, 0.8F, 1.2F);
             }
             case VEX_CALL -> {
