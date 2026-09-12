@@ -61,7 +61,14 @@ public final class ZenithCommands {
                                     "chillzonezenith.command.crafting.recipe",
                                     true
                             ))
-                            .then(recipeCategoryArgument())))
+                            // Literal nodes are sent in the command tree and are
+                            // more reliable for Bedrock/Geyser autocomplete.
+                            .then(recipeCategoryLiteral(ZenithCategory.ENDER))
+                            .then(recipeCategoryLiteral(ZenithCategory.RAVAGER))
+                            .then(recipeCategoryLiteral(ZenithCategory.GUARDIAN))
+                            .then(recipeCategoryLiteral(ZenithCategory.WARDEN))
+                            .then(recipeCategoryLiteral(ZenithCategory.WITHER))
+                            .then(recipeCategoryLiteral(ZenithCategory.ZENITH))))
 
                     /*
                      * ADMIN / MANAGEMENT COMMANDS
@@ -198,6 +205,26 @@ public final class ZenithCommands {
                                 ctx.getSource(),
                                 StringArgumentType.getString(ctx, "category")
                             ))))
+
+                    .then(permissionLiteral(
+                            "joinmessage",
+                            "chillzonezenith.command.joinmessage"
+                    )
+                        .then(Commands.literal("on")
+                            .executes(ctx -> setJoinMessage(ctx.getSource(), true)))
+                        .then(Commands.literal("off")
+                            .executes(ctx -> setJoinMessage(ctx.getSource(), false))))
+
+                    // Friendly alias: /zenith join message on|off
+                    .then(permissionLiteral(
+                            "join",
+                            "chillzonezenith.command.joinmessage"
+                    )
+                        .then(Commands.literal("message")
+                            .then(Commands.literal("on")
+                                .executes(ctx -> setJoinMessage(ctx.getSource(), true)))
+                            .then(Commands.literal("off")
+                                .executes(ctx -> setJoinMessage(ctx.getSource(), false)))))
             );
         });
     }
@@ -233,61 +260,25 @@ public final class ZenithCommands {
                 .requires(source -> hasPermission(source, node, false));
     }
 
-    private static com.mojang.brigadier.builder.RequiredArgumentBuilder<CommandSourceStack, String>
-    recipeCategoryArgument() {
-        return Commands.argument("category", StringArgumentType.word())
-                .suggests((ctx, builder) -> {
-                    ZenithProgressionState state =
-                            ZenithProgressionState.get(ctx.getSource().getServer());
+    private static com.mojang.brigadier.builder.LiteralArgumentBuilder<CommandSourceStack>
+    recipeCategoryLiteral(ZenithCategory category) {
+        var categoryBuilder = Commands.literal(category.id());
 
-                    java.util.List<String> activeCategories = new java.util.ArrayList<>();
+        for (ZenithRecipeBook.RecipeDef recipe : ZenithRecipeBook.RECIPES) {
+            if (recipe.category() != category) continue;
 
-                    for (ZenithCategory category : ZenithCategory.values()) {
-                        if (state.isEnabled(category)) {
-                            activeCategories.add(category.id());
-                        }
-                    }
+            String weapon = pathOf(recipe.output());
+            categoryBuilder.then(
+                    Commands.literal(weapon)
+                            .executes(ctx -> showRecipe(
+                                    ctx.getSource(),
+                                    category.id(),
+                                    weapon
+                            ))
+            );
+        }
 
-                    return SharedSuggestionProvider.suggest(
-                            activeCategories,
-                            builder
-                    );
-                })
-                .then(Commands.argument("weapon", StringArgumentType.word())
-                        .suggests((ctx, builder) -> {
-                            ZenithCategory category = ZenithCategory.fromId(
-                                    StringArgumentType.getString(ctx, "category")
-                            ).orElse(null);
-
-                            if (category == null) {
-                                return builder.buildFuture();
-                            }
-
-                            ZenithProgressionState state =
-                                    ZenithProgressionState.get(ctx.getSource().getServer());
-
-                            if (!state.isEnabled(category)) {
-                                return builder.buildFuture();
-                            }
-
-                            java.util.List<String> weapons = new java.util.ArrayList<>();
-
-                            for (ZenithRecipeBook.RecipeDef recipe : ZenithRecipeBook.RECIPES) {
-                                if (recipe.category() == category) {
-                                    weapons.add(pathOf(recipe.output()));
-                                }
-                            }
-
-                            return SharedSuggestionProvider.suggest(
-                                    weapons,
-                                    builder
-                            );
-                        })
-                        .executes(ctx -> showRecipe(
-                                ctx.getSource(),
-                                StringArgumentType.getString(ctx, "category"),
-                                StringArgumentType.getString(ctx, "weapon")
-                        )));
+        return categoryBuilder;
     }
 
     private static com.mojang.brigadier.builder.RequiredArgumentBuilder<CommandSourceStack, String>
@@ -306,6 +297,26 @@ public final class ZenithCommands {
                 ));
     }
 
+
+    private static int setJoinMessage(
+            CommandSourceStack source,
+            boolean enabled
+    ) {
+        ZenithProgressionState state =
+                ZenithProgressionState.get(source.getServer());
+
+        state.setJoinMessageEnabled(enabled);
+
+        source.sendSuccess(
+                () -> Component.literal(
+                        "[Zenith] Join message is now "
+                                + (enabled ? "ON." : "OFF.")
+                ).withStyle(enabled ? ChatFormatting.GREEN : ChatFormatting.YELLOW),
+                false
+        );
+
+        return 1;
+    }
 
     private static int showRecipe(
             CommandSourceStack source,

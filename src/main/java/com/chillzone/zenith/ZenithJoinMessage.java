@@ -1,5 +1,6 @@
 package com.chillzone.zenith;
 
+import com.chillzone.zenith.progression.ZenithProgressionState;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -9,6 +10,10 @@ public final class ZenithJoinMessage {
 
     public static void initialize() {
         ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> {
+            if (!ZenithProgressionState.get(server).isJoinMessageEnabled()) {
+                return;
+            }
+
             var player = handler.getPlayer();
 
             player.sendSystemMessage(Component.literal("━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
