@@ -10,6 +10,7 @@ import com.mojang.brigadier.arguments.IntegerArgumentType;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
+import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
@@ -239,13 +240,18 @@ public final class ZenithCommands {
                     ZenithProgressionState state =
                             ZenithProgressionState.get(ctx.getSource().getServer());
 
+                    java.util.List<String> activeCategories = new java.util.ArrayList<>();
+
                     for (ZenithCategory category : ZenithCategory.values()) {
                         if (state.isEnabled(category)) {
-                            builder.suggest(category.id());
+                            activeCategories.add(category.id());
                         }
                     }
 
-                    return builder.buildFuture();
+                    return SharedSuggestionProvider.suggest(
+                            activeCategories,
+                            builder
+                    );
                 })
                 .then(Commands.argument("weapon", StringArgumentType.word())
                         .suggests((ctx, builder) -> {
@@ -264,13 +270,18 @@ public final class ZenithCommands {
                                 return builder.buildFuture();
                             }
 
+                            java.util.List<String> weapons = new java.util.ArrayList<>();
+
                             for (ZenithRecipeBook.RecipeDef recipe : ZenithRecipeBook.RECIPES) {
                                 if (recipe.category() == category) {
-                                    builder.suggest(pathOf(recipe.output()));
+                                    weapons.add(pathOf(recipe.output()));
                                 }
                             }
 
-                            return builder.buildFuture();
+                            return SharedSuggestionProvider.suggest(
+                                    weapons,
+                                    builder
+                            );
                         })
                         .executes(ctx -> showRecipe(
                                 ctx.getSource(),

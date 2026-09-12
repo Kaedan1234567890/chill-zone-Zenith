@@ -1,0 +1,46 @@
+CHILL ZONE ZENITH - FIX 33
+RECIPE COMMAND AUTOCOMPLETE FIX
+
+Built directly on Fix 32.
+
+FIXED
+=====
+The public recipe command now uses Minecraft's SharedSuggestionProvider
+instead of manually appending Brigadier suggestions.
+
+Command:
+  /zenith crafting recipe <category> <weapon>
+
+EXPECTED AUTOCOMPLETE
+=====================
+After:
+  /zenith crafting recipe <SPACE>
+
+the client should receive all currently ACTIVE categories:
+  ender
+  ravager
+  guardian
+  warden
+  wither
+  zenith
+
+Only active branches are suggested.
+
+After selecting a category and typing another space, for example:
+  /zenith crafting recipe ender <SPACE>
+
+the client should receive only the weapons in that active branch:
+  ender_blade
+  shulker_blade
+  ender_dragon_blade
+
+Inactive branches continue to be hidden and manually requesting an inactive
+branch recipe is still rejected.
+
+UNCHANGED
+=========
+- LuckPerms nodes from Fix 32
+- OP/gamemaster fallback for admin commands
+- public recipe permission fallback
+- Bedrock/Geyser-friendly server-side chat command design
+- textures, abilities, sounds, drops, crafting, locks, cooldowns
