@@ -7,7 +7,6 @@ import com.chillzone.zenith.item.ZenithTestMode;
 import com.chillzone.zenith.crafting.ZenithRecipeBook;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
-import me.lucko.fabric.api.permissions.v0.Permissions;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -208,7 +207,7 @@ public final class ZenithCommands {
             boolean publicFallback
     ) {
         if (publicFallback) {
-            return Permissions.check(source, node, true);
+            return me.lucko.fabric.api.permissions.v0.Permissions.check(source, node, true);
         }
 
         int fallbackLevel = source.permissions()
@@ -224,7 +223,7 @@ public final class ZenithCommands {
          * For everyone else, level 4 keeps admin commands unavailable
          * unless LuckPerms explicitly grants the individual node.
          */
-        return Permissions.check(source, node, fallbackLevel);
+        return me.lucko.fabric.api.permissions.v0.Permissions.check(source, node, fallbackLevel);
     }
 
     private static com.mojang.brigadier.builder.LiteralArgumentBuilder<CommandSourceStack>
