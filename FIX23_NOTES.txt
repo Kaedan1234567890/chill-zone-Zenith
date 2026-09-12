@@ -1,0 +1,8 @@
+CHILL ZONE ZENITH - FIX 23
+
+Fixes the single Minecraft 26.2 compile error shown after Fix 22:
+SoundEvents.SCULK_SENSOR_CLICKING is not available under the current 26.2 mappings.
+
+Echo Sense now uses the Warden heartbeat sound instead.
+
+Everything else from Fix 22 remains intact.
