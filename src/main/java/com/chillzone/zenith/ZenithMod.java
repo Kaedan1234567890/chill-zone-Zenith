@@ -26,6 +26,7 @@ public final class ZenithMod implements ModInitializer {
         ZenithAbilityScheduler.initialize();
         ZenithCommands.register();
         ZenithMobDrops.initialize();
+        ZenithJoinMessage.initialize();
 
         LOGGER.info("Chill Zone Zenith loaded. /zenith commands registered.");
     }

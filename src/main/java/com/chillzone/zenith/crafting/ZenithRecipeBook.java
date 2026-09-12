@@ -43,14 +43,14 @@ public final class ZenithRecipeBook {
     public static final List<RecipeDef> RECIPES = List.of(
         // ENDER
         recipe(ZenithCategory.ENDER, "ender_blade", false,
-                mc("ender_eye"), mc("ender_eye"), mc("ender_eye"),
+                mc("end_rod"), mc("ender_eye"), mc("end_rod"),
                 mc("ender_eye"), mc("diamond_sword"), mc("ender_eye"),
-                mc("chorus_fruit"), mc("stick"), mc("chorus_fruit")),
+                mc("chorus_fruit"), mc("blaze_rod"), mc("chorus_fruit")),
 
         recipe(ZenithCategory.ENDER, "shulker_blade", false,
-                mc("shulker_shell"), mc("shulker_shell"), mc("shulker_shell"),
+                mc("end_rod"), mc("shulker_shell"), mc("end_rod"),
                 mc("shulker_shell"), mc("diamond_sword"), mc("shulker_shell"),
-                mc("chorus_fruit"), mc("ender_eye"), mc("chorus_fruit")),
+                mc("chorus_fruit"), mc("end_crystal"), mc("chorus_fruit")),
 
         recipe(ZenithCategory.ENDER, "ender_dragon_blade", true,
                 mc("end_rod"), mc("dragon_breath"), mc("end_rod"),
@@ -66,7 +66,7 @@ public final class ZenithRecipeBook {
         recipe(ZenithCategory.RAVAGER, "mansion_blade", false,
                 mc("totem_of_undying"), mc("ominous_trial_key"), mc("totem_of_undying"),
                 mc("emerald_block"), mc("diamond_sword"), mc("emerald_block"),
-                mc("dark_oak_log"), mc("crossbow"), mc("dark_oak_log")),
+                mc("dark_oak_trapdoor"), mc("crossbow"), mc("dark_oak_trapdoor")),
 
         recipe(ZenithCategory.RAVAGER, "ravager_blade", true,
                 mc("totem_of_undying"), mc("goat_horn"), mc("totem_of_undying"),
@@ -118,7 +118,7 @@ public final class ZenithRecipeBook {
 
         recipe(ZenithCategory.WITHER, "golden_desire", false,
                 mc("gold_block"), mc("gilded_blackstone"), mc("gold_block"),
-                mc("gold_ingot"), mc("golden_sword"), mc("gold_ingot"),
+                mc("gold_ingot"), mc("diamond_sword"), mc("gold_ingot"),
                 mc("gilded_blackstone"), mc("ancient_debris"), mc("gilded_blackstone")),
 
         recipe(ZenithCategory.WITHER, "ghost_blade", false,
