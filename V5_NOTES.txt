@@ -1,0 +1,21 @@
+ZENITH v5 - DIAMOND/NETHERITE VISUALS + NORMAL SWORD ENCHANTING
+
+Changes from v4:
+- Golden Desire now displays as a Diamond Sword, not a Golden Sword.
+- No Zenith weapon uses a Gold Sword client appearance.
+- Intermediate blades display as Diamond Swords.
+- Boss Blades display as Netherite Swords.
+- Zenith Blade displays as a Netherite Sword.
+- Crafting tables still display as normal vanilla Crafting Tables.
+
+Enchanting:
+The Zenith weapons keep normal sword enchanting support. Players can use
+the sword enchantments Minecraft normally allows for these weapon items,
+including examples such as Sharpness, Smite, Bane of Arthropods,
+Unbreaking, Mending, Fire Aspect, Knockback, and Looting where normal
+Minecraft compatibility rules allow them.
+
+No custom code was added to strip or block enchantments.
+
+Abilities, commands, cooldowns, recipes, progression, custom names/lore,
+and server-side-only Polymer representation remain unchanged.

@@ -7,7 +7,6 @@ import com.chillzone.zenith.item.ZenithItems;
 import com.chillzone.zenith.item.ZenithCreativeTabExtras;
 import com.chillzone.zenith.item.ZenithAbilityScheduler;
 import net.fabricmc.api.ModInitializer;
-import eu.pb4.polymer.resourcepack.api.PolymerResourcePackUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,9 +26,6 @@ public final class ZenithMod implements ModInitializer {
         ZenithAbilityScheduler.initialize();
         ZenithCommands.register();
         ZenithMobDrops.initialize();
-
-        PolymerResourcePackUtils.addModAssets(MOD_ID);
-        PolymerResourcePackUtils.markAsRequired();
 
         LOGGER.info("Chill Zone Zenith loaded. /zenith commands registered.");
     }

@@ -1,0 +1,24 @@
+ZENITH v4 - VANILLA VISUALS / NO RESOURCE PACK
+
+Goal:
+Keep the mod fully server-side and eliminate broken/missing custom textures.
+
+Client visuals:
+- Intermediate Zenith swords -> Diamond Sword
+- Golden Desire -> Golden Sword
+- Boss Blades -> Netherite Sword
+- Zenith Blade -> Netherite Sword
+- All Zenith crafting tables -> normal Crafting Table
+
+The custom names, name colours, lore, abilities, cooldowns, commands,
+recipes, progression, and unique-boss rules remain server-side.
+
+This version DOES NOT force a Polymer resource pack.
+That means there should be no giant purple/black missing-model blocks from
+the Zenith custom assets.
+
+The different swords are still identified by their custom names and coloured
+text. Boss Blades keep their star names, and the Zenith keeps its triple-star
+name.
+
+This is intentionally the reliable vanilla-visual fallback.

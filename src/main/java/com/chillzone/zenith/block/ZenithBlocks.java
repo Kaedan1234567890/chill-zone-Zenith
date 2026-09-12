@@ -2,11 +2,7 @@ package com.chillzone.zenith.block;
 
 import com.chillzone.zenith.ZenithMod;
 import com.chillzone.zenith.progression.ZenithCategory;
-import eu.pb4.polymer.blocks.api.BlockModelType;
-import eu.pb4.polymer.blocks.api.PolymerBlockModel;
-import eu.pb4.polymer.blocks.api.PolymerBlockResourceUtils;
 import net.minecraft.core.Registry;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
@@ -27,19 +23,8 @@ public final class ZenithBlocks {
         ResourceKey<Block> blockKey = ResourceKey.create(Registries.BLOCK, id);
         ResourceKey<Item> itemKey = ResourceKey.create(Registries.ITEM, id);
 
-        BlockState clientState = PolymerBlockResourceUtils.requestBlock(
-                BlockModelType.FULL_BLOCK,
-                PolymerBlockModel.of(
-                        Identifier.fromNamespaceAndPath(
-                                ZenithMod.MOD_ID,
-                                "block/" + name
-                        )
-                )
-        );
-
-        if (clientState == null) {
-            clientState = Blocks.CRAFTING_TABLE.defaultBlockState();
-        }
+        // Pure vanilla client representation: no custom resource pack required.
+        BlockState clientState = Blocks.CRAFTING_TABLE.defaultBlockState();
 
         Block block = new ZenithCraftingTableBlock(
                 BlockBehaviour.Properties.of()
@@ -56,7 +41,6 @@ public final class ZenithBlocks {
                 block,
                 new Item.Properties()
                         .useBlockDescriptionPrefix()
-                        .component(DataComponents.ITEM_MODEL, id)
                         .setId(itemKey)
         );
 

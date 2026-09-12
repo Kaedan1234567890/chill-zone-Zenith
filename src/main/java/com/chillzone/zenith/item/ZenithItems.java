@@ -53,8 +53,8 @@ public final class ZenithItems {
                  "sponge_blade",
                  "echo_blade",
                  "blade_of_fire",
-                 "ghost_blade" -> Items.DIAMOND_SWORD;
-            case "golden_desire" -> Items.GOLDEN_SWORD;
+                 "ghost_blade",
+                 "golden_desire" -> Items.DIAMOND_SWORD;
             default -> Items.NETHERITE_SWORD;
         };
     }
@@ -70,10 +70,6 @@ public final class ZenithItems {
     ) {
         Item.Properties properties = new Item.Properties()
                 .sword(ToolMaterial.NETHERITE, 1.0F, -2.4F)
-                .component(
-                        DataComponents.ITEM_MODEL,
-                        Identifier.fromNamespaceAndPath(ZenithMod.MOD_ID, id)
-                )
                 .component(
                         DataComponents.CUSTOM_NAME,
                         Component.literal(displayName).withStyle(
