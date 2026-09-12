@@ -1,0 +1,82 @@
+CHILL ZONE ZENITH - FIX 30
+PUBLIC CRAFTING RECIPE GUIDE + SERVER PREP PASS
+
+Built directly on Fix 29.
+
+NEW PUBLIC RECIPE COMMAND
+=========================
+This command does NOT require operator/gamemaster permission.
+
+Preferred syntax:
+  /zenith recipe <category> <weapon>
+
+Friendly aliases:
+  /zenith craftingrecipe <category> <weapon>
+  /zenith crafting recipe <category> <weapon>
+
+Examples:
+  /zenith recipe ender ender_blade
+  /zenith recipe ender ender_dragon_blade
+  /zenith recipe guardian elder_guardian_blade
+  /zenith recipe wither blade_of_fire
+  /zenith recipe zenith zenith_blade
+
+Autocomplete:
+- category autocompletes: ender, ravager, guardian, warden, wither, zenith
+- weapon autocompletes only weapons belonging to the selected category
+
+CHAT DISPLAY
+============
+The command prints:
+- weapon name
+- required custom crafting station
+- Boss/Ultimate marker where relevant
+- exact 3x3 crafting layout
+- total ingredient counts
+- reminder that the layout is exact
+
+This is intentionally normal server chat rather than a client-only GUI.
+That keeps the recipe guide server-side and makes it much safer for
+Java + Geyser/Bedrock players.
+
+PERMISSIONS
+===========
+Only the recipe-guide branches are public.
+
+Existing management commands remain gamemaster/operator gated:
+- status
+- test / untest
+- activate / deactivate
+- activateall / deactivateall
+- give
+- detect
+- resetboss
+
+LUCKPERMS
+=========
+No LuckPerms API dependency was added. LuckPerms can remain installed normally.
+The public recipe command does not need a permission node.
+Admin commands retain the existing vanilla gamemaster permission check.
+
+SERVER-SIDE / GEYSER
+====================
+No client UI, client event, client mixin, or client command was added.
+Recipe output is plain Minecraft chat components.
+
+The existing custom-item Bedrock visuals still require the server's existing
+Geyser custom-item mapping / Bedrock resource-pack setup. This update does not
+change those item IDs or mappings.
+
+PRESERVED FROM FIX 29
+=====================
+- user's 18 custom sword textures
+- all weapon abilities
+- sounds / Zenith sound sequence
+- activation gates
+- custom mob drops
+- restricted custom crafting tables
+- unique Boss Blade / Zenith locks
+- reconnect cooldown protection
+- admin test-player / test-all control
+- boss/Zenith star names
+- detect/reset commands

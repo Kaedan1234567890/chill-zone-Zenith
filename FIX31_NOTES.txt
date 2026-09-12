@@ -1,0 +1,58 @@
+CHILL ZONE ZENITH - FIX 31
+LUCKPERMS + ACTIVE-BRANCH RECIPE GUIDE
+
+Built from Fix 30 / Fix 29 texture build.
+
+COMMAND SYNTAX
+==============
+The player recipe guide now uses ONLY:
+
+  /zenith crafting recipe <category> <weapon>
+
+Removed as player aliases:
+  /zenith recipe ...
+  /zenith craftingrecipe ...
+
+ACTIVE-BRANCH FILTERING
+=======================
+- Recipe category autocomplete only shows ACTIVE branches.
+- If Wither is off, "wither" does not appear.
+- Weapon autocomplete only shows weapons from the selected ACTIVE branch.
+- Manually typing a recipe for an inactive branch is rejected.
+
+LUCKPERMS
+=========
+Every Zenith command/subcommand now has its own permission node.
+
+The recipe guide defaults public:
+  chillzonezenith.command.crafting.recipe
+
+Management/testing commands default to vanilla operator/gamemaster access,
+but LuckPerms can explicitly grant or deny each node.
+
+fabric-permissions-api 0.7.0 is bundled into the built Zenith mod jar,
+so this source has a direct LuckPerms-compatible Fabric permission bridge.
+
+BEDROCK / GEYSER
+================
+No client GUI or client mod was introduced. The recipe guide is still
+server-generated Brigadier commands + normal chat output, which is the
+right design for Geyser/Bedrock command use.
+
+Custom Java item textures/sounds are NOT automatically converted by Geyser.
+Bedrock still needs its own Bedrock resource pack / Geyser custom mappings
+for custom item visuals, and Bedrock sound definitions for custom audio.
+The current Zenith ability sounds are vanilla Minecraft sounds, so they
+remain much easier for Bedrock clients to hear through Geyser.
+
+PRESERVED
+=========
+- user's 18 custom Java sword textures
+- all Zenith abilities
+- cooldown reconnect protection
+- admin test controls
+- custom mob drops
+- unique boss locks
+- activation system
+- restricted crafting tables
+- custom names / stars

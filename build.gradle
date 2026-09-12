@@ -21,6 +21,9 @@ dependencies {
     // directly, so DO NOT request officialMojangMappings() here.
     implementation "net.fabricmc:fabric-loader:${project.loader_version}"
     implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+
+    // LuckPerms-compatible permission bridge (bundled inside this mod jar).
+    include(implementation("me.lucko:fabric-permissions-api:0.7.0"))
 }
 
 processResources {
