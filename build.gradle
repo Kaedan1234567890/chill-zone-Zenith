@@ -27,10 +27,10 @@ dependencies {
     include(implementation("me.lucko:fabric-permissions-api:0.7.0"))
 
     // Server-side custom-content bridge for unmodded Java clients.
-    modImplementation include("eu.pb4:polymer-core:0.17.4+26.2")
-    modImplementation include("eu.pb4:polymer-resource-pack:0.17.4+26.2")
-    modImplementation include("eu.pb4:polymer-blocks:0.17.4+26.2")
-    modImplementation include("eu.pb4:polymer-autohost:0.17.4+26.2")
+    include(implementation("eu.pb4:polymer-core:0.17.4+26.2"))
+    include(implementation("eu.pb4:polymer-resource-pack:0.17.4+26.2"))
+    include(implementation("eu.pb4:polymer-blocks:0.17.4+26.2"))
+    include(implementation("eu.pb4:polymer-autohost:0.17.4+26.2"))
 }
 
 processResources {
