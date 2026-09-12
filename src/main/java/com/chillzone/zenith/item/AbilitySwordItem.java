@@ -5,8 +5,10 @@ import com.chillzone.zenith.progression.ZenithProgressionState;
 import eu.pb4.polymer.core.api.item.PolymerItem;
 import net.fabricmc.fabric.api.networking.v1.context.PacketContext;
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -51,6 +53,14 @@ public class AbilitySwordItem extends Item implements PolymerItem {
     @Override
     public Item getPolymerItem(ItemStack itemStack, PacketContext context) {
         return this.polymerBaseItem;
+    }
+
+    @Override
+    public Identifier getPolymerItemModel(ItemStack stack, PacketContext context, HolderLookup.Provider lookup) {
+        // null tells Polymer to use the vanilla base item's own model instead of
+        // the custom Zenith registry item's model id. This is required for
+        // unmodded clients when we intentionally use vanilla visuals only.
+        return null;
     }
 
     @Override
