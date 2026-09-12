@@ -1,0 +1,37 @@
+CHILL ZONE ZENITH - FIX 28
+VANILLA-SCALE SWORD TEXTURE TEST BUILD
+
+Built directly on Fix 27.
+
+TEXTURE CHANGE
+==============
+All 18 Zenith sword textures were replaced with the corrected
+Vanilla-Scale V2 sprites.
+
+Scale target:
+- Standard Minecraft 16x16 item texture canvas.
+- Regular Zenith swords use approximately 15 pixels across their
+  longest visible dimension.
+- Boss Blades and Zenith can use approximately the full 16-pixel
+  dimension.
+- Nearest-neighbour pixel scaling only.
+- No smoothing or anti-aliasing.
+
+The goal of this build is to test the IN-GAME apparent size against
+normal Minecraft swords before doing the final artistic redesign.
+
+Everything from Fix 27 is preserved:
+- ★ Boss Blade naming
+- ★★★ Zenith naming
+- bold branch-coloured custom names
+- descriptions and cooldown text
+- reconnect cooldown protection
+- /zenith test <player>, /zenith untest <player>
+- /zenith test all, /zenith untest all
+- abilities, sounds, drops, locks, activation, detect/reset commands
+
+IMPORTANT
+=========
+This is a visual-scale test build. The custom silhouettes/details are
+still the current art and are intended to be redesigned after the scale
+is confirmed in-game.
