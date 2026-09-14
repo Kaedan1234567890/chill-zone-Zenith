@@ -39,36 +39,42 @@ public final class ZenithCommands {
                 Commands.literal("zenith")
 
                     /*
-                     * PUBLIC PLAYER RECIPE GUIDE
-                     * Exact syntax:
-                     * /zenith crafting recipe <category> <weapon>
+                     * PUBLIC PLAYER RECIPE GUIDES
                      *
-                     * LuckPerms node:
+                     * /zenith craftingrecipe <category> <weapon>
+                     * /zenith craftingtable <category>
+                     *
+                     * Both use the existing public recipe permission:
                      * chillzonezenith.command.crafting.recipe
                      *
-                     * Fallback is TRUE so normal members can use the guide
-                     * even when no explicit LuckPerms rule exists.
+                     * Literal nodes are used so Java and Geyser/Bedrock clients
+                     * receive concrete autocomplete entries.
                      */
-                    .then(Commands.literal("crafting")
+                    .then(Commands.literal("craftingrecipe")
                         .requires(source -> hasPermission(
                                 source,
                                 "chillzonezenith.command.crafting.recipe",
                                 true
                         ))
-                        .then(Commands.literal("recipe")
-                            .requires(source -> hasPermission(
-                                    source,
-                                    "chillzonezenith.command.crafting.recipe",
-                                    true
-                            ))
-                            // Literal nodes are sent in the command tree and are
-                            // more reliable for Bedrock/Geyser autocomplete.
-                            .then(recipeCategoryLiteral(ZenithCategory.ENDER))
-                            .then(recipeCategoryLiteral(ZenithCategory.RAVAGER))
-                            .then(recipeCategoryLiteral(ZenithCategory.GUARDIAN))
-                            .then(recipeCategoryLiteral(ZenithCategory.WARDEN))
-                            .then(recipeCategoryLiteral(ZenithCategory.WITHER))
-                            .then(recipeCategoryLiteral(ZenithCategory.ZENITH))))
+                        .then(recipeCategoryLiteral(ZenithCategory.ENDER))
+                        .then(recipeCategoryLiteral(ZenithCategory.RAVAGER))
+                        .then(recipeCategoryLiteral(ZenithCategory.GUARDIAN))
+                        .then(recipeCategoryLiteral(ZenithCategory.WARDEN))
+                        .then(recipeCategoryLiteral(ZenithCategory.WITHER))
+                        .then(recipeCategoryLiteral(ZenithCategory.ZENITH)))
+
+                    .then(Commands.literal("craftingtable")
+                        .requires(source -> hasPermission(
+                                source,
+                                "chillzonezenith.command.crafting.recipe",
+                                true
+                        ))
+                        .then(tableCategoryLiteral(ZenithCategory.ENDER))
+                        .then(tableCategoryLiteral(ZenithCategory.RAVAGER))
+                        .then(tableCategoryLiteral(ZenithCategory.GUARDIAN))
+                        .then(tableCategoryLiteral(ZenithCategory.WARDEN))
+                        .then(tableCategoryLiteral(ZenithCategory.WITHER))
+                        .then(tableCategoryLiteral(ZenithCategory.ZENITH)))
 
                     /*
                      * ADMIN / MANAGEMENT COMMANDS
@@ -281,6 +287,15 @@ public final class ZenithCommands {
         return categoryBuilder;
     }
 
+    private static com.mojang.brigadier.builder.LiteralArgumentBuilder<CommandSourceStack>
+    tableCategoryLiteral(ZenithCategory category) {
+        return Commands.literal(category.id())
+                .executes(ctx -> showCraftingTableRecipe(
+                        ctx.getSource(),
+                        category.id()
+                ));
+    }
+
     private static com.mojang.brigadier.builder.RequiredArgumentBuilder<CommandSourceStack, String>
     categoryArgument(boolean enabled) {
         return Commands.argument("category", StringArgumentType.word())
@@ -316,6 +331,56 @@ public final class ZenithCommands {
         );
 
         return 1;
+    }
+
+    private static int showCraftingTableRecipe(
+            CommandSourceStack source,
+            String rawCategory
+    ) {
+        ZenithCategory category = ZenithCategory.fromId(rawCategory).orElse(null);
+
+        if (category == null) {
+            source.sendFailure(
+                    Component.literal("[Zenith] Unknown crafting table category: " + rawCategory)
+            );
+            return 0;
+        }
+
+        ZenithProgressionState state =
+                ZenithProgressionState.get(source.getServer());
+
+        if (!state.isEnabled(category)) {
+            source.sendFailure(
+                    Component.literal(
+                            "[Zenith] The " + category.id()
+                                    + " branch is not currently active."
+                    )
+            );
+            return 0;
+        }
+
+        ZenithRecipeBook.RecipeDef found = null;
+
+        for (ZenithRecipeBook.RecipeDef recipe : ZenithRecipeBook.TABLE_RECIPES) {
+            if (recipe.category() == category) {
+                found = recipe;
+                break;
+            }
+        }
+
+        if (found == null) {
+            source.sendFailure(
+                    Component.literal("[Zenith] No crafting table recipe found.")
+            );
+            return 0;
+        }
+
+        return displayRecipe(
+                source,
+                found,
+                "Regular Crafting Table",
+                "CRAFTING TABLE RECIPE"
+        );
     }
 
     private static int showRecipe(
@@ -474,11 +539,108 @@ public final class ZenithCommands {
 
         source.sendSuccess(
                 () -> Component.literal(
-                                "Tip: /zenith crafting recipe "
+                                "Tip: /zenith craftingrecipe "
                                         + category.id()
                                         + " <weapon>"
                         )
                         .withStyle(ChatFormatting.DARK_GRAY),
+                false
+        );
+
+        return 1;
+    }
+
+    private static int displayRecipe(
+            CommandSourceStack source,
+            ZenithRecipeBook.RecipeDef recipe,
+            String stationName,
+            String label
+    ) {
+        ZenithCategory category = recipe.category();
+        ChatFormatting branchColor = categoryColor(category);
+        String outputName = prettyItemName(recipe.output());
+
+        source.sendSuccess(
+                () -> Component.literal("================================")
+                        .withStyle(ChatFormatting.DARK_GRAY),
+                false
+        );
+
+        source.sendSuccess(
+                () -> Component.literal("  " + outputName)
+                        .withStyle(style ->
+                                style.withColor(branchColor).withBold(true)
+                        ),
+                false
+        );
+
+        source.sendSuccess(
+                () -> Component.literal(label)
+                        .withStyle(style ->
+                                style.withColor(branchColor).withBold(true)
+                        ),
+                false
+        );
+
+        source.sendSuccess(
+                () -> Component.literal("Station: " + stationName)
+                        .withStyle(ChatFormatting.GRAY),
+                false
+        );
+
+        source.sendSuccess(
+                () -> Component.literal("+--------- 3 x 3 CRAFTING GRID ---------+")
+                        .withStyle(ChatFormatting.DARK_GRAY),
+                false
+        );
+
+        String[] grid = recipe.grid();
+
+        for (int row = 0; row < 3; row++) {
+            int first = row * 3;
+            String rowText =
+                    "[ " + prettyItemName(grid[first]) + " ]"
+                            + "  [ " + prettyItemName(grid[first + 1]) + " ]"
+                            + "  [ " + prettyItemName(grid[first + 2]) + " ]";
+
+            source.sendSuccess(
+                    () -> Component.literal(rowText)
+                            .withStyle(ChatFormatting.WHITE),
+                    false
+            );
+        }
+
+        source.sendSuccess(
+                () -> Component.literal("+---------------------------------------+")
+                        .withStyle(ChatFormatting.DARK_GRAY),
+                false
+        );
+
+        Map<String, Integer> totals = new LinkedHashMap<>();
+
+        for (String ingredient : grid) {
+            String name = prettyItemName(ingredient);
+            totals.put(name, totals.getOrDefault(name, 0) + 1);
+        }
+
+        StringBuilder needed = new StringBuilder("Needed: ");
+        boolean firstIngredient = true;
+
+        for (Map.Entry<String, Integer> entry : totals.entrySet()) {
+            if (!firstIngredient) {
+                needed.append(" | ");
+            }
+
+            needed.append(entry.getValue())
+                    .append("x ")
+                    .append(entry.getKey());
+
+            firstIngredient = false;
+        }
+
+        source.sendSuccess(
+                () -> Component.literal(needed.toString())
+                        .withStyle(ChatFormatting.GRAY),
                 false
         );
 

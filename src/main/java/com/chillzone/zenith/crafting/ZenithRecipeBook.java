@@ -40,6 +40,38 @@ public final class ZenithRecipeBook {
         return new RecipeDef(category, cz(output), uniqueBoss, grid);
     }
 
+    public static final List<RecipeDef> TABLE_RECIPES = List.of(
+        recipe(ZenithCategory.ENDER, "ender_crafting_table", false,
+                mc("end_rod"), mc("ender_eye"), mc("end_rod"),
+                mc("ender_eye"), mc("crafting_table"), mc("ender_eye"),
+                mc("end_rod"), mc("ender_eye"), mc("end_rod")),
+
+        recipe(ZenithCategory.RAVAGER, "ravager_crafting_table", false,
+                mc("emerald_block"), mc("totem_of_undying"), mc("emerald_block"),
+                mc("dark_oak_planks"), mc("crafting_table"), mc("dark_oak_planks"),
+                mc("crossbow"), mc("goat_horn"), mc("crossbow")),
+
+        recipe(ZenithCategory.GUARDIAN, "guardian_crafting_table", false,
+                mc("sea_lantern"), mc("heart_of_the_sea"), mc("sea_lantern"),
+                mc("dark_prismarine"), mc("crafting_table"), mc("dark_prismarine"),
+                mc("prismarine_bricks"), mc("wet_sponge"), mc("prismarine_bricks")),
+
+        recipe(ZenithCategory.WARDEN, "warden_crafting_table", false,
+                mc("echo_shard"), mc("sculk_catalyst"), mc("echo_shard"),
+                mc("sculk_sensor"), mc("crafting_table"), mc("sculk_sensor"),
+                mc("echo_shard"), mc("sculk_catalyst"), mc("echo_shard")),
+
+        recipe(ZenithCategory.WITHER, "wither_crafting_table", false,
+                mc("blaze_rod"), mc("wither_skeleton_skull"), mc("blaze_rod"),
+                mc("nether_bricks"), mc("crafting_table"), mc("nether_bricks"),
+                mc("soul_sand"), mc("wither_skeleton_skull"), mc("soul_sand")),
+
+        recipe(ZenithCategory.ZENITH, "zenith_crafting_table", false,
+                cz("ender_crafting_table"), mc("crafting_table"), cz("ravager_crafting_table"),
+                mc("crafting_table"), cz("guardian_crafting_table"), mc("crafting_table"),
+                cz("warden_crafting_table"), mc("crafting_table"), cz("wither_crafting_table"))
+    );
+
     public static final List<RecipeDef> RECIPES = List.of(
         // ENDER
         recipe(ZenithCategory.ENDER, "ender_blade", false,
