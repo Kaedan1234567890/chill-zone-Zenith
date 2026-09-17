@@ -34,9 +34,6 @@ public final class ZenithProgressionState extends SavedData {
     private final EnumMap<ZenithCategory, Boolean> bossCrafted =
             new EnumMap<>(ZenithCategory.class);
 
-    // Bit 16 stores DISABLED instead of enabled so old worlds default to ON.
-    private boolean joinMessageEnabled = true;
-
     public ZenithProgressionState() {
         for (ZenithCategory category : ZenithCategory.values()) {
             enabled.put(category, false);
@@ -52,9 +49,6 @@ public final class ZenithProgressionState extends SavedData {
             enabled.put(values[i], (packed & (1 << i)) != 0);
             bossCrafted.put(values[i], (packed & (1 << (i + 8))) != 0);
         }
-
-        // Old saves have this bit unset, which correctly means enabled.
-        joinMessageEnabled = (packed & (1 << 16)) == 0;
     }
 
     private int toPackedInt() {
@@ -65,8 +59,6 @@ public final class ZenithProgressionState extends SavedData {
             if (isEnabled(values[i])) packed |= (1 << i);
             if (isBossCrafted(values[i])) packed |= (1 << (i + 8));
         }
-
-        if (!joinMessageEnabled) packed |= (1 << 16);
 
         return packed;
     }
@@ -103,15 +95,6 @@ public final class ZenithProgressionState extends SavedData {
 
     public Map<ZenithCategory, Boolean> snapshot() {
         return Map.copyOf(enabled);
-    }
-
-    public boolean isJoinMessageEnabled() {
-        return joinMessageEnabled;
-    }
-
-    public void setJoinMessageEnabled(boolean enabled) {
-        this.joinMessageEnabled = enabled;
-        setDirty();
     }
 
     public static ZenithProgressionState get(MinecraftServer server) {

@@ -2,8 +2,6 @@ package com.chillzone.zenith.block;
 
 import com.chillzone.zenith.crafting.ZenithCraftingMenu;
 import com.chillzone.zenith.progression.ZenithCategory;
-import eu.pb4.polymer.core.api.block.PolymerBlock;
-import net.fabricmc.fabric.api.networking.v1.context.PacketContext;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionResult;
@@ -17,23 +15,12 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.Nullable;
 
-public final class ZenithCraftingTableBlock extends Block implements PolymerBlock {
+public final class ZenithCraftingTableBlock extends Block {
     private final ZenithCategory category;
-    private final BlockState polymerBlockState;
 
-    public ZenithCraftingTableBlock(
-            Properties properties,
-            ZenithCategory category,
-            BlockState polymerBlockState
-    ) {
+    public ZenithCraftingTableBlock(Properties properties, ZenithCategory category) {
         super(properties);
         this.category = category;
-        this.polymerBlockState = polymerBlockState;
-    }
-
-    @Override
-    public BlockState getPolymerBlockState(BlockState state, PacketContext context) {
-        return this.polymerBlockState;
     }
 
     public ZenithCategory category() {
